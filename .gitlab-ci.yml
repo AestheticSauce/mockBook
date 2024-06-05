@@ -33,7 +33,7 @@ setup-job:
   stage: setup
   script:
     - echo "setting up environment..."
-    - sudo apt install -y maven
+    - apt install -y maven
 
 coverage-test-job:   # This job also runs in the test stage.
   stage: test        # It can run at the same time as unit-test-job and lint-test-job (in parallel).
