@@ -25,22 +25,15 @@ build-job:       # This job runs in the build stage, which runs first.
   stage: build
   script:
     - echo "Compiling the code..."
-    - mvn clean install
-    - mvn package
+    - mvn clean package
     - echo "Compile complete."
 
 coverage-test-job:   # This job also runs in the test stage.
   stage: test        # It can run at the same time as unit-test-job and lint-test-job (in parallel).
   script:
-    - echo "Checking code coverage..."
-    - mvn test jacoco:report
-    - |
-      if [ $(awk -F',' '/Total/{match($0,"([0-9]+\\.[0-9]+%)",$a); print $a[1]}' target/site/jacoco/jacoco.csv | sed 's/%//') < 70.0 ]; then
-        echo "Code coverage is less than 70%"
-        exit 1
-      else
-        echo "Code coverage is above 70%"
-      fi
+    - echo "Checking code coverage and tests..."
+    - mvn verify
+    - mvn install
 #
 #designite-analysis-job:
 #  stage: test
