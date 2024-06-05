@@ -17,7 +17,6 @@
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
 
 stages:          # List of stages for jobs, and their order of execution
-  - setup
   - build
   - test
   - deploy
@@ -25,8 +24,9 @@ stages:          # List of stages for jobs, and their order of execution
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
   script:
-    - echo "setting up maven..."
+    - echo "setting up environment..."
     - apt-get update -y && apt-get upgrade -y
+    - apt-get install -y openjdk-17-jdk
     - apt-get install -y maven
     - echo "Compiling the code..."
     - mvn clean package
@@ -35,8 +35,9 @@ build-job:       # This job runs in the build stage, which runs first.
 coverage-test-job:   # This job also runs in the test stage.
   stage: test        # It can run at the same time as unit-test-job and lint-test-job (in parallel).
   script:
-    - echo "setting up maven..."
+    - echo "setting up environment..."
     - apt-get update -y && apt-get upgrade -y
+    - apt-get install -y openjdk-17-jdk
     - apt-get install -y maven
     - echo "Checking code coverage and tests..."
     - mvn verify
