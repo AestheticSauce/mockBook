@@ -33,6 +33,7 @@ setup-job:
   stage: setup
   script:
     - echo "setting up environment..."
+    - apt-get update -y && upgrade -y
     - apt install -y maven
 
 coverage-test-job:   # This job also runs in the test stage.
