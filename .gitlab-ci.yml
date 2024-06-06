@@ -24,26 +24,29 @@ stages:          # List of stages for jobs, and their order of execution
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
   script:
+    - echo "setting up environment..."
+    - apt-get update -y && apt-get upgrade -y
+    - apt-get install -y openjdk-17-jdk
+    - apt-get install -y maven
     - echo "Compiling the code..."
+    - mvn clean package
     - echo "Compile complete."
 
-unit-test-job:   # This job runs in the test stage.
-  stage: test    # It only starts when the job in the build stage completes successfully.
+coverage-test-job:   # This job also runs in the test stage.
+  stage: test        # It can run at the same time as unit-test-job and lint-test-job (in parallel).
   script:
-    - echo "Running unit tests... This will take about 60 seconds."
-    - sleep 60
-    - echo "Code coverage is 90%"
+    - echo "setting up environment..."
+    - apt-get update -y && apt-get upgrade -y
+    - apt-get install -y openjdk-17-jdk
+    - apt-get install -y maven
+    - echo "Checking code coverage and tests..."
+    - mvn verify
+    - mvn install
+#
+#designite-analysis-job:
+#  stage: test
+#  script:
+#    - echo "Running Designite analysis..."
+#    - wget "https://www.designite-tools.com/static/download/DJE/DesigniteJava.jar"
+#    - java -jar DesigniteJava.jar -ci -repo $CI_PROJECT_URL -pat $PAT -k $D_KEY
 
-lint-test-job:   # This job also runs in the test stage.
-  stage: test    # It can run at the same time as unit-test-job (in parallel).
-  script:
-    - echo "Linting code... This will take about 10 seconds."
-    - sleep 10
-    - echo "No lint issues found."
-
-deploy-job:      # This job runs in the deploy stage.
-  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
-  environment: production
-  script:
-    - echo "Deploying application..."
-    - echo "Application successfully deployed."
