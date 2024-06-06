@@ -1,0 +1,65 @@
+package com.group3.mockbook.controller;
+
+import org.springframework.web.bind.annotation.RestController;
+
+import com.group3.mockbook.exceptions.UserNotFoundException;
+import com.group3.mockbook.model.User;
+import com.group3.mockbook.service.UserService;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.http.HttpStatus;
+
+
+
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+    @Autowired
+    UserService userService;
+
+    @PostMapping("")
+    @ResponseStatus(HttpStatus.CREATED)
+    public User postUser(@RequestBody User user) {
+        return userService.saveUser(user);
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public User getMethodName(@PathVariable int id) {
+        User user = userService.getUserById(id);
+        if (user == null) {
+            throw new UserNotFoundException(id);
+        } else {
+            return user;
+        }
+    }
+    
+    @GetMapping("")
+    @ResponseStatus(HttpStatus.OK)
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
+    @PutMapping("")
+    @ResponseStatus(HttpStatus.OK)
+    public User updateUser(@RequestBody User user) {
+        return userService.updateUser(user);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable int id) {
+        userService.deleteUser(id);
+    }
+    
+}
