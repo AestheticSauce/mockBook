@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import {
+    createBrowserRouter,
+    RouterProvider,
+} from "react-router-dom";
+import Register from "./views/Register";
+import { useState } from "react";
+import Login from "./views/Login";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    
+    const [user, setUser] = useState(null);
+
+    const router = createBrowserRouter([
+        {
+            path: '/Register',
+            element: <Register/>
+        },
+        {
+            path: '/Login',
+            element: <Login setUser={setUser}/>
+        }
+    ]);
+
+    return (
+        <><link rel="stylesheet" href="https://matcha.mizu.sh/matcha.css"></link>
+        <RouterProvider router={router}>
+            {router}
+        </RouterProvider></>
+    );
 }
 
 export default App;
