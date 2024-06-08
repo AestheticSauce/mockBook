@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus;
 
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class UserController {
     @Autowired
     UserService userService;
@@ -35,7 +35,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public User getMethodName(@PathVariable int id) {
+    public User getUser(@PathVariable int id) {
         User user = userService.getUserById(id);
         if (user == null) {
             throw new UserNotFoundException(id);

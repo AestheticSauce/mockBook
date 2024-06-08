@@ -33,7 +33,7 @@ public class UserIntegrationTest {
 
     @Test
     public void testGetUsers() {
-        ResponseEntity<User[]> response = restTemplate.getForEntity("/api/users", User[].class);
+        ResponseEntity<User[]> response = restTemplate.getForEntity("/users", User[].class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(3, response.getBody().length);
@@ -42,12 +42,12 @@ public class UserIntegrationTest {
     @Test
     public void testCreateUser() {
         User newUser = new User("newuser@example.com", "newuser", "newpassword", "What is your favorite book?", "1984");
-        ResponseEntity<User> response = restTemplate.postForEntity("/api/users", newUser, User.class);
+        ResponseEntity<User> response = restTemplate.postForEntity("/users", newUser, User.class);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody().getId());
 
         // Verify the new user is in the database
-        ResponseEntity<User> getUserResponse = restTemplate.getForEntity("/api/users/" + response.getBody().getId(), User.class);
+        ResponseEntity<User> getUserResponse = restTemplate.getForEntity("/users/" + response.getBody().getId(), User.class);
         assertEquals(HttpStatus.OK, getUserResponse.getStatusCode());
         assertEquals("newuser", getUserResponse.getBody().getUsername());
     }
@@ -55,8 +55,8 @@ public class UserIntegrationTest {
     @Test
     public void testUpdateUser() {
         User updatedUser = new User("newuser@example.com", "newuser", "newpassword", "What is your favorite book?", "1984");
-        updatedUser.setId(1);
-        ResponseEntity<User> response = restTemplate.exchange("/api/users", HttpMethod.PUT, new HttpEntity<>(updatedUser), User.class);
+        updatedUser.setId(2);
+        ResponseEntity<User> response = restTemplate.exchange("/users", HttpMethod.PUT, new HttpEntity<>(updatedUser), User.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(updatedUser.getEmail(), response.getBody().getEmail());
         assertEquals(updatedUser.getId(), response.getBody().getId());
@@ -67,8 +67,9 @@ public class UserIntegrationTest {
 
     @Test
     public void testDeleteUser() {
-        restTemplate.delete("/api/users/1");
-        ResponseEntity<String> response = restTemplate.getForEntity("/api/users/1", String.class);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        ResponseEntity<Void> delResponse = restTemplate.exchange("/users/1", HttpMethod.DELETE, null, Void.class);
+        assertEquals(HttpStatus.NO_CONTENT, delResponse.getStatusCode());
+        ResponseEntity<String> getResponse = restTemplate.getForEntity("/users/1", String.class);
+        assertEquals(HttpStatus.NOT_FOUND, getResponse.getStatusCode());
     }
 }
