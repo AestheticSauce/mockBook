@@ -1,4 +1,4 @@
-import { set, useForm} from "react-hook-form";
+import { useForm } from "react-hook-form";
 import React from "react";
 import { redirect } from "react-router-dom";
 
@@ -10,7 +10,7 @@ function Register() {
     setError,
   } = useForm();
   const onSubmit = (data) => {
-    fetch("http://localhost:8085/users", {
+    fetch("http://localhost:8085/v1/api/users", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -21,7 +21,7 @@ function Register() {
         if (!response.ok) {
           setError("root.serverError", {type: response.status, message: response.statusText})
         }
-        var user = response.json();
+        const user = response.json();
         console.log(user);
         redirect("/Login");
       })
@@ -88,7 +88,7 @@ function Register() {
         />
         {errors.securityAnswer && <p>{errors.securityAnswer.message}</p>}
 
-        <button {...register("submit")} type="submit">Submit</button>
+        <button type="submit">Submit</button>
         {errors.submit && <p>{errors.submit.message}</p>}
       </form>
     </div>
