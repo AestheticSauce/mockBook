@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import React from "react";
+import React, { useState } from  "react";
 import { redirect } from "react-router-dom";
 
 function Register() {
@@ -9,6 +9,10 @@ function Register() {
     formState: { errors },
     setError,
   } = useForm();
+
+  // State to manage password masking
+  const [showPassword, setShowPassword] = useState(false);
+
   const onSubmit = (data) => {
     fetch("http://localhost:8085/v1/api/users", {
       method: "POST",
@@ -30,6 +34,7 @@ function Register() {
         setError("submit", {type: "custom", message: error.message})
       });
   };
+
   return (
     <div>
       <h1>Register</h1>
@@ -57,7 +62,7 @@ function Register() {
         <label htmlFor="password">Password</label>
         <input
           id="password"
-          type="password"
+          type={showPassword ? "text" : "password"} // toggle masking
           {...register("password", {
             required:
               "Required, must be 8 characters, 1 number, 1 upper case, 1 lower case and 1 special character",
@@ -72,6 +77,9 @@ function Register() {
             },
           })}
         />
+        <button type="button" onClick={() => setShowPassword(!showPassword)}>
+          {showPassword ? "Hide" : "Show"} Password
+        </button>
         {errors.password && <p>{errors.password.message}</p>}
 
         <label htmlFor="securityQuestion">Security Question</label>

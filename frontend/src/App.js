@@ -12,6 +12,10 @@ function App() {
 
     const router = createBrowserRouter([
         {
+            path: '/', // root page
+            element: <Register/>
+        },
+        {
             path: '/Register',
             element: <Register/>
         },
