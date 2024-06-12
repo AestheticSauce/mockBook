@@ -10,7 +10,7 @@ function UserProfile() {
         navigate(`/userprofile/5/edit`);
     };
 
-    // use effect that fetches correct user data, and handles errors (network/user not existing)
+    //effect to pull in user data.. will probably implement smarter solution later
     useEffect(() => {
         fetch("http://localhost:8085/v1/api/users/5")
             .then(response => {
@@ -37,11 +37,11 @@ function UserProfile() {
 
     return (
         <div>
-            <h1>{user.name}</h1>
+            <h1>{user.username}</h1>
             <p>Email: {user.email}</p>
-            <p>Bio: </p>
-            <p>Favourite Color: </p>
-            <p>Birthday: </p>
+            <p>Bio: {user.biography}</p>
+            <p>Favourite food: {user.favFood}</p>
+            <p>Birthday: {user.degree}</p>
             <button onClick={handleEditClick}>Edit Profile</button>
         </div>
     );

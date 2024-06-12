@@ -24,6 +24,14 @@ public class User {
 
     private String password;
 
+    private String biography;
+
+    private String birthday;
+
+    private String degree;
+
+    private String favFood;
+
     @CreationTimestamp
     private Timestamp created_at;
 
@@ -35,6 +43,8 @@ public class User {
     private String security_answer;
 
     // Getters and Setters
+
+
     public String getUsername() {
         return username;
     }
@@ -98,7 +108,37 @@ public class User {
     public void setSecurity_answer(String security_answer) {
         this.security_answer = security_answer;
     }
+    public String getBiography() {
+        return biography;
+    }
 
+    public void setBiography(String biography) {
+        this.biography = biography;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getDegree() {
+        return degree;
+    }
+
+    public void setDegree(String degree) {
+        this.degree = degree;
+    }
+
+    public String getFavFood() {
+        return favFood;
+    }
+
+    public void setFavFood(String favFood) {
+        this.favFood = favFood;
+    }
     public User() {
     }
 
