@@ -35,14 +35,14 @@ function App() {
             element: <PasswordReset/>
 =======
             path: '/UserProfile',
-            element: <Navigate to="/userprofile/$" /> //using navigate for hardcoded exmaple, until login is finished
+            element: <Navigate to="/userprofile/5" /> //using navigate for hardcoded example, until login is finished
         },
         {
             path: '/userprofile/:id',
             element: <UserProfile />
         },
         {
-            path: '/userprofile/:id/edit', //needs to check login status in the future, so only user can change user
+            path: '/userprofile/:id/edit', //needs to check login status in the future, so only user can edit user
             element: <EditUserProfile />
 >>>>>>> d9684cd (basic functionality added, in process of hardcoding for examples sake)
         }
