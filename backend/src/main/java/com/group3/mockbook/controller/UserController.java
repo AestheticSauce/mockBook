@@ -50,16 +50,37 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @PutMapping("")
-    @ResponseStatus(HttpStatus.OK)
-    public User updateUser(@RequestBody User user) {
-        return userService.updateUser(user);
-    }
+
+    /*changed the put mapping so updating the profile works, we can talk later on it.. I dont really understand
+    how put mapping works so im leaving it commented incase we need it later.
+     */
+//    @PutMapping("")
+//    @ResponseStatus(HttpStatus.OK)
+//    public User updateUser(@RequestBody User user) {
+//        return userService.updateUser(user);
+//    }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public User updateUser(@PathVariable int id, @RequestBody User userDetails) {
+        User user = userService.getUserById(id);
+        if (user == null) {
+            throw new UserNotFoundException(id);
+        }
+
+        user.setUsername(userDetails.getUsername());
+        user.setBiography(userDetails.getBiography());
+        user.setBirthday(userDetails.getBirthday());
+        user.setDegree(userDetails.getDegree());
+        user.setFavFood(userDetails.getFavFood());
+
+        return userService.updateUser(user);
     }
     
 }
