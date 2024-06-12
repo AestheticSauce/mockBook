@@ -1,12 +1,17 @@
 import {
-    createBrowserRouter,
+    createBrowserRouter, Navigate,
     RouterProvider,
 } from "react-router-dom";
 import Register from "./views/Register";
 import { useState } from "react";
 import Login from "./views/Login";
+<<<<<<< HEAD
 import PasswordReset from "./views/PasswordReset";
 
+=======
+import UserProfile from "./views/UserProfile";
+import EditUserProfile from './views/EditUserProfile';
+>>>>>>> d9684cd (basic functionality added, in process of hardcoding for examples sake)
 function App() {
     
     const [user, setUser] = useState(null);
@@ -25,8 +30,21 @@ function App() {
             element: <Login setUser={setUser}/>
         },
         {
+<<<<<<< HEAD
             path: '/password-reset',
             element: <PasswordReset/>
+=======
+            path: '/UserProfile',
+            element: <Navigate to="/userprofile/$" /> //using navigate for hardcoded exmaple, until login is finished
+        },
+        {
+            path: '/userprofile/:id',
+            element: <UserProfile />
+        },
+        {
+            path: '/userprofile/:id/edit', //needs to check login status in the future, so only user can change user
+            element: <EditUserProfile />
+>>>>>>> d9684cd (basic functionality added, in process of hardcoding for examples sake)
         }
     ]);
 
