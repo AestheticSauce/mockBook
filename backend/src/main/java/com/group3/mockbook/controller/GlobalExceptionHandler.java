@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.group3.mockbook.exceptions.UserNotFoundException;
+import com.group3.mockbook.exceptions.UserNotFoundByIdException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(value=UserNotFoundException.class)
-    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException e) {
+    @ExceptionHandler(value= UserNotFoundByIdException.class)
+    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundByIdException e) {
         ResponseEntity<String> response = new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
         return response;
     }
