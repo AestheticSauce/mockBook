@@ -5,6 +5,8 @@ function RequesteeControl(prop){
     const [show, setShow] = useState(true)
 
     return(
+        <>
+        <link rel="stylesheet" href="https://matcha.mizu.sh/matcha.css"></link>
         <div>
             { show ? 
             <div>
@@ -14,6 +16,8 @@ function RequesteeControl(prop){
             </div> :<></>
             }
         </div>
+        </>
+        
     )
 
 }

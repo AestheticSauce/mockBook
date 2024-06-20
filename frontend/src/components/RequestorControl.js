@@ -5,8 +5,10 @@ function RequestorControl(prop){
     const [pending,updatePending] = useState(false);
 
     return(
+        <>
+        <link rel="stylesheet" href="https://matcha.mizu.sh/matcha.css"></link>
         <div>
-        <p>{prop.firstName}&nbsp;{prop.lastName}</p>
+            <p>{prop.firstName}&nbsp;{prop.lastName}</p>
             {show ? <div>
                     <button onClick={()=>{
                     updateShow(false)
@@ -21,6 +23,8 @@ function RequestorControl(prop){
                  }}>Cancel</button>
             </div>:<></>}
         </div>
+        </>
+       
     )
 }
 export default RequestorControl
