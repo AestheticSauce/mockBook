@@ -2,6 +2,7 @@ package com.group3.mockbook.service.Implementation;
 
 import java.util.List;
 
+import com.group3.mockbook.exceptions.DuplicateEmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,14 +11,17 @@ import com.group3.mockbook.repository.UserRepository;
 import com.group3.mockbook.service.UserService;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
 
     @Override
     public User saveUser(User user) {
+        String email = user.getEmail();
         // Implementation goes here
+        if (userRepository.findByEmail(email) != null)
+            throw new DuplicateEmailException(email);
         return userRepository.save(user);
     }
 
