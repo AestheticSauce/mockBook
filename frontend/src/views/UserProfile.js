@@ -7,12 +7,12 @@ function UserProfile() {
     const [loading, setLoading] = useState(true); // To handle loading state
     const [error, setError] = useState(null); // To handle errors
     const handleEditClick = () => {
-        navigate(`/userprofile/5/edit`);
+        navigate(`/userprofile/24/edit`);
     };
 
     //effect to pull in user data.. will probably implement smarter solution later
     useEffect(() => {
-        fetch("http://localhost:8085/v1/api/users/5")
+        fetch("http://localhost:8085/v1/api/users/24")
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network failure');
