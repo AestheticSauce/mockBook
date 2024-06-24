@@ -32,6 +32,8 @@ public class User {
 
     private String favFood;
 
+    private String Status;
+
     @CreationTimestamp
     private Timestamp created_at;
 
@@ -43,6 +45,13 @@ public class User {
     private String security_answer;
 
     // Getters and Setters
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
+    }
 
 
     public String getUsername() {

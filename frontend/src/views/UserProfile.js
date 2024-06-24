@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import axios from "axios";
 function UserProfile() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null); //handling who the user is
@@ -35,7 +35,23 @@ function UserProfile() {
     if (error) return <div>Error: {error}</div>;
     if (!user) return <div>No user data available</div>;
 
+    const setStatus= async (selectedRole) => {
+        try{
+            const response = await axios.put(`http://localhost:8085/api/users/{id}/{status}`);
+            console.log(response.data);
+            await setStatus(response.data);
+        } catch (error) {
+            console.error(`Error changing status`, error);
+        }
+    };
+
+    const statusChange = (event) => {
+        const status = event.target.value;
+        setStatus(user.id,status)
+    };
+
     return (
+        <>
         <div>
             <h1>{user.username}</h1>
             <p>Email: {user.email}</p>
@@ -44,6 +60,16 @@ function UserProfile() {
             <p>Birthday: {user.degree}</p>
             <button onClick={handleEditClick}>Edit Profile</button>
         </div>
+        <div>
+            <select name="status" onChange={statusChange} style={{ padding: '10px', borderRadius: '5px',
+                border: '1px solid #ccc' }}>
+                <option value="">user.status</option>
+                <option value="Online">Online</option>
+                <option value="Do not disturb">Do not disturb</option>
+                <option value="Offline">Offline</option>
+            </select>
+        </div>
+        </>
     );
 }
 

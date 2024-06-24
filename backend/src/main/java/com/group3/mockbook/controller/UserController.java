@@ -60,6 +60,18 @@ public class UserController {
 //        return userService.updateUser(user);
 //    }
 
+    @PutMapping("/{id}/status")
+    @ResponseStatus(HttpStatus.OK)
+    public void setStatus(@PathVariable int id, @RequestBody String status) {
+        User user = userService.getUserById(id);
+        if (user == null) {
+            throw new UserNotFoundException(id);
+        } else {
+            user.setStatus(status);
+            userService.updateUser(user);
+        }
+    }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable int id) {
