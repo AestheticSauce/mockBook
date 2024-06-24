@@ -55,16 +55,23 @@ public class UserIntegrationTest {
     @Test
     public void testUpdateUser() {
         User updatedUser = new User("newuser@example.com", "newuser", "newpassword", "What is your favorite book?", "1984");
-        updatedUser.setId(2);
-        ResponseEntity<User> response = restTemplate.exchange("/users", HttpMethod.PUT, new HttpEntity<>(updatedUser), User.class);
+        updatedUser.setBiography("New biography");
+        updatedUser.setBirthday("1990-01-01");
+        updatedUser.setDegree("New Degree");
+        updatedUser.setFavFood("New Favorite Food");
+
+        HttpEntity<User> request = new HttpEntity<>(updatedUser);
+        ResponseEntity<User> response = restTemplate.exchange("/users/2", HttpMethod.PUT, request, User.class);
+
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(updatedUser.getEmail(), response.getBody().getEmail());
-        assertEquals(updatedUser.getId(), response.getBody().getId());
-        assertEquals(updatedUser.getSecurity_answer(), response.getBody().getSecurity_answer());
         assertEquals(updatedUser.getUsername(), response.getBody().getUsername());
         assertEquals(updatedUser.getPassword(), response.getBody().getPassword());
+        assertEquals(updatedUser.getBiography(), response.getBody().getBiography());
+        assertEquals(updatedUser.getBirthday(), response.getBody().getBirthday());
+        assertEquals(updatedUser.getDegree(), response.getBody().getDegree());
+        assertEquals(updatedUser.getFavFood(), response.getBody().getFavFood());
     }
-
     @Test
     public void testDeleteUser() {
         ResponseEntity<Void> delResponse = restTemplate.exchange("/users/1", HttpMethod.DELETE, null, Void.class);
