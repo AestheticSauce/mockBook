@@ -35,7 +35,7 @@ function PasswordReset() {
         fetch("http://localhost:8085/v1/api/reset-password", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, newPassword: data.newPassword }),
+            body: JSON.stringify({ email: data.email, newPassword: data.newPassword }),
         })
         .then((response) => {
             if (!response.ok) {
