@@ -27,7 +27,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@Sql({"/test-data.sql"})
+@Sql({ "/test-data.sql" })
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -48,8 +48,15 @@ public class UserIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
         String json = resp.getResponse().getContentAsString();
-        List<User> users = new ObjectMapper().readValue(json, new TypeReference<List<User>>(){});
+        List<User> users = new ObjectMapper().readValue(json, new TypeReference<List<User>>() {
+        });
         assertEquals(3, users.size());
+    }
+
+    @Test
+    public void testGetUsersNoAuth() throws Exception {
+        api.perform(get("/users"))
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -57,24 +64,25 @@ public class UserIntegrationTest {
     public void testCreateUser() throws Exception {
         User newUser = new User("altUser@example.com", "altUser", "newPass", "What is your favorite book?", "1984");
         String newUserJson = new ObjectMapper().writeValueAsString(newUser);
-    
+
         MvcResult result = api.perform(post("/users")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(newUserJson))
-            .andExpect(status().isCreated())
-            .andReturn();
-    
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(newUserJson))
+                .andExpect(status().isCreated())
+                .andReturn();
+
         User responseUser = new ObjectMapper().readValue(result.getResponse().getContentAsString(), User.class);
         assertNotNull(responseUser.getId());
-    
+
         // Verify the new user is in the database
         MvcResult getUserResult = api.perform(get("/users/" + responseUser.getId())
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andReturn();
-        
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
         // Verify the user was created correctly
-        User getUserResponse = new ObjectMapper().readValue(getUserResult.getResponse().getContentAsString(), User.class);
+        User getUserResponse = new ObjectMapper().readValue(getUserResult.getResponse().getContentAsString(),
+                User.class);
         assertNotNull(getUserResponse.getId());
         assertEquals("altUser@example.com", getUserResponse.getEmail());
         assertEquals("altUser", getUserResponse.getUsername());
@@ -84,20 +92,30 @@ public class UserIntegrationTest {
     }
 
     @Test
+    public void testCreateUserNoAuth() throws Exception {
+        User newUser = new User("altUser@example.com", "altUser", "newPass", "What is your favorite book?", "1984");
+        String newUserJson = new ObjectMapper().writeValueAsString(newUser);
+
+        api.perform(post("/users").contentType(MediaType.APPLICATION_JSON).content(newUserJson))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     @WithMockUser
     public void testUpdateUser() throws Exception {
         // Get the user to update
-        User updatedUser = new User("newuser@example.com", "newuser", "newpassword", "What is your favorite book?", "1984");
+        User updatedUser = new User("newuser@example.com", "newuser", "newpassword", "What is your favorite book?",
+                "1984");
         updatedUser.setId(2);
         String updatedUserJson = new ObjectMapper().writeValueAsString(updatedUser);
-    
+
         // Update the user
         MvcResult result = api.perform(put("/users")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(updatedUserJson))
-            .andExpect(status().isOk())
-            .andReturn();
-    
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(updatedUserJson))
+                .andExpect(status().isOk())
+                .andReturn();
+
         // Verify the user was updated
         User responseUser = new ObjectMapper().readValue(result.getResponse().getContentAsString(), User.class);
 
@@ -107,18 +125,39 @@ public class UserIntegrationTest {
         assertEquals(updatedUser.getUsername(), responseUser.getUsername());
         assertEquals(updatedUser.getPassword(), responseUser.getPassword());
     }
-    
+
+    @Test
+    public void testUpdateUserNoAuth() throws Exception {
+        // Get the user to update
+        User updatedUser = new User("newuser@example.com", "newuser", "newpassword", "What is your favorite book?",
+                "1984");
+        updatedUser.setId(2);
+        String updatedUserJson = new ObjectMapper().writeValueAsString(updatedUser);
+
+        // Update the user
+        api.perform(put("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(updatedUserJson))
+                .andExpect(status().isForbidden());
+    }
+
     @Test
     @WithMockUser
     public void testDeleteUser() throws Exception {
         api.perform(get("/users/1"))
-            .andExpect(status().isOk());
-        
+                .andExpect(status().isOk());
+
         api.perform(delete("/users/1"))
-            .andExpect(status().isNoContent());
-    
+                .andExpect(status().isNoContent());
+
         api.perform(get("/users/1"))
-            .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testDeleteUserNoAuth() throws Exception {
+        api.perform(delete("/users/1"))
+                .andExpect(status().isForbidden());
     }
 
 }
