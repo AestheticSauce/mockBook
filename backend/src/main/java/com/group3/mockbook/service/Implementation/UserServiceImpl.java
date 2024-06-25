@@ -1,6 +1,7 @@
 package com.group3.mockbook.service.Implementation;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,25 +29,25 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User getUserById(int id) {
+    public Optional<User> getUserById(int id) {
         // Implementation goes here
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id);
     }
 
     @Override
-    public User getUserByEmail(String email) {
+    public Optional<User> getUserByEmail(String email) {
         // Implementation goes here
         return userRepository.findByEmail(email);
     }
 
     @Override
-    public User getUserByUsername(String username) {
+    public Optional<User> getUserByUsername(String username) {
         // Implementation goes here
         return userRepository.findByUsername(username);
     }
 
     @Override
-    public User getUserByEmailAndPassword(String email, String password) {
+    public Optional<User> getUserByEmailAndPassword(String email, String password) {
         // Implementation goes here
         return userRepository.findByEmailAndPassword(email, password);
     }

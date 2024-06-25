@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import com.group3.mockbook.exceptions.UserNotFoundException;
 
@@ -16,9 +18,15 @@ public class GlobalExceptionHandler {
         return response;
     }
 
+    @ExceptionHandler(value=BadCredentialsException.class)
+    public ResponseEntity<String> handleUserNotFoundException(BadCredentialsException e) {
+        ResponseEntity<String> response = new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        return response;
+    }
+
     @ExceptionHandler(value=Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String handleException(Exception e) {
-        return e.getMessage();
+    public ResponseEntity<String> handleException(Exception e) {
+        ResponseEntity<String> response = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return response;
     }
 }

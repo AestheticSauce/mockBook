@@ -1,14 +1,18 @@
 package com.group3.mockbook.model;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -34,7 +38,19 @@ public class User {
 
     private String security_answer;
 
+    private boolean enabled;
+
+    private String role;
+
     // Getters and Setters
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -97,6 +113,14 @@ public class User {
 
     public void setSecurity_answer(String security_answer) {
         this.security_answer = security_answer;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String roles) {
+        this.role = role;
     }
 
     public User() {

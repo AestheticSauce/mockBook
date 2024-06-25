@@ -7,6 +7,7 @@ import com.group3.mockbook.model.User;
 import com.group3.mockbook.service.UserService;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,11 +37,11 @@ public class UserController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public User getUser(@PathVariable int id) {
-        User user = userService.getUserById(id);
-        if (user == null) {
+        Optional<User> user = userService.getUserById(id);
+        if (user.isEmpty()) {
             throw new UserNotFoundException(id);
         } else {
-            return user;
+            return user.get();
         }
     }
     
