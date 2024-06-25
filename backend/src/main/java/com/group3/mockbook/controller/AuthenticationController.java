@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.group3.mockbook.dto.LoginRequest;
 import com.group3.mockbook.dto.LoginResponse;
-import com.group3.mockbook.model.User;
 import com.group3.mockbook.security.JwtIssuer;
 import com.group3.mockbook.security.UserPrincipal;
 import com.group3.mockbook.service.UserService;
@@ -15,14 +14,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import java.security.Principal;
-import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
