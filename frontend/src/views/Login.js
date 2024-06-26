@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import {useNavigate} from 'react-router-dom';
+import * as jwtUtil from "../jwt.js";
 
 function Login(){
     // State to manage password masking
@@ -28,8 +29,13 @@ function Login(){
             }
 
             const data = await response.json();
-            localStorage.setItem('token', data.token);
-            navigate(`/userprofile:${data.id}`); // redirect to home or dashboard page
+            jwtUtil.setToken(data.token);
+            const user = jwtUtil.getUserProfile();
+            if (user) {
+                navigate(`/userprofile/${user.id}`); // Redirect to user profile page
+            } else {
+                setError("Failed to decode token. Please try again.");
+            }
         } catch (error) {
             console.error("Error:", error);
             setError("An error occurred. Please try again later.");
