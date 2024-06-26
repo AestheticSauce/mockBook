@@ -2,36 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { useParams } from 'react-router-dom';
-import'../CSS/UserProfileStyle.css'
+import {getUserId, getUserProfile, verifyJwt} from "../jwt.js";
 function UserProfile() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null); //handling who the user is
     const [loading, setLoading] = useState(true); // To handle loading state
     const [error, setError] = useState(null); // To handle errors
-    const { id } = useParams();
+    const [ id,setId] = useState(null);
 
     const handleEditClick = () => {
         navigate(`/userprofile/25/edit`);
     };
 
+
+
     //effect to pull in user data.. will probably implement smarter solution later
     useEffect(() => {
-        fetch("http://localhost:8085/v1/api/users/24")
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network failure');
-                }
-                return response.json();
-            })
-            .then(data => {
-                setUser(data);
-                setLoading(false);
-            })
-            .catch(error => {
-                console.error("User may not exist!", error);
-                setError(error.message);
-                setLoading(false);
-            });
+       setUser(getUserProfile());
+        navigate(`/userprofile/${user.sub}/`);
     }, []);
 
     //handling errors/loading of the page
