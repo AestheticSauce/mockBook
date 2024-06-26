@@ -34,7 +34,19 @@ public class User {
 
     private String security_answer;
 
+    private boolean enabled;
+
+    private String role;
+
     // Getters and Setters
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -97,6 +109,14 @@ public class User {
 
     public void setSecurity_answer(String security_answer) {
         this.security_answer = security_answer;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String roles) {
+        this.role = role;
     }
 
     public User() {

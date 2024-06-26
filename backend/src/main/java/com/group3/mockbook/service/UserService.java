@@ -1,6 +1,7 @@
 package com.group3.mockbook.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.group3.mockbook.model.User;
 
@@ -9,13 +10,13 @@ public interface UserService {
 
     List<User> getAllUsers();
 
-    User getUserById(int id);
+    Optional<User> getUserById(int id);
 
-    User getUserByEmail(String email);
+    Optional<User> getUserByEmail(String email);
 
-    User getUserByUsername(String username);
+    Optional<User> getUserByUsername(String username);
 
-    User getUserByEmailAndPassword(String email, String password);
+    Optional<User> getUserByEmailAndPassword(String email, String password);
 
     User updateUser(User user);
 
