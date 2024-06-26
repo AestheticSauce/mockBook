@@ -1,13 +1,13 @@
 package com.group3.mockbook.dto;
 
-public class LoginRequest {
+public class LoginRequestDto {
     private String email;
     private String password;
 
-    public LoginRequest() {
+    public LoginRequestDto() {
     }
 
-    public LoginRequest(String email, String password) {
+    public LoginRequestDto(String email, String password) {
         this.email = email;
         this.password = password;
     }

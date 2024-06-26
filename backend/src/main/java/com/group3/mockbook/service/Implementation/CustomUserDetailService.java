@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ import com.group3.mockbook.security.UserPrincipal;
  * It is used to load user-specific data when a user logs in. 
  * It is used by the AuthenticationManager to authenticate a user.
  */
-@Service
+@Service("userDetailsService")
 public class CustomUserDetailService implements UserDetailsService{
 
     @Autowired
@@ -33,7 +32,7 @@ public class CustomUserDetailService implements UserDetailsService{
      * @throws UsernameNotFoundException If the user is not found
      */
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserPrincipal loadUserByUsername(String email) throws UsernameNotFoundException {
         // Implementation goes here
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isEmpty()) {

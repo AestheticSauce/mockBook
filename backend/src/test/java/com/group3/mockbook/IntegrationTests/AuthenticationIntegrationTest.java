@@ -1,9 +1,9 @@
 package com.group3.mockbook.IntegrationTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.group3.mockbook.dto.RegistrationRequest;
-import com.group3.mockbook.dto.LoginRequest;
-import com.group3.mockbook.dto.LoginResponse;
+import com.group3.mockbook.dto.RegistrationRequestDto;
+import com.group3.mockbook.dto.LoginRequestDto;
+import com.group3.mockbook.dto.LoginResponseDto;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class AuthenticationIntegrationTest {
 
     @Test
     public void testLoginValid() throws Exception {
-        LoginRequest loginRequest = new LoginRequest("user1@example.com", "password1");
+        LoginRequestDto loginRequest = new LoginRequestDto("user1@example.com", "password1");
 
         MvcResult loginResult = api.perform(
                 post("/auth/login")
@@ -48,13 +48,13 @@ public class AuthenticationIntegrationTest {
                         .content(new ObjectMapper().writeValueAsString(loginRequest)))
                 .andExpect(status().isOk())
                 .andReturn();
-        LoginResponse loginResponse = new ObjectMapper().readValue(loginResult.getResponse().getContentAsString(), LoginResponse.class);
+        LoginResponseDto loginResponse = new ObjectMapper().readValue(loginResult.getResponse().getContentAsString(), LoginResponseDto.class);
         assertNotNull(loginResponse.getToken());
     }
 
     @Test
     public void testLoginInvalidUser() throws Exception {
-        LoginRequest loginRequest = new LoginRequest("IdontExist@example.com", "password1");
+        LoginRequestDto loginRequest = new LoginRequestDto("IdontExist@example.com", "password1");
 
         api.perform(
                 post("/auth/login")
@@ -65,7 +65,7 @@ public class AuthenticationIntegrationTest {
 
     @Test
     public void testLoginInvalidPassword() throws Exception {
-        LoginRequest loginRequest = new LoginRequest("user1@example.com", "notmypassword");
+        LoginRequestDto loginRequest = new LoginRequestDto("user1@example.com", "notmypassword");
 
         api.perform(
                 post("/auth/login")
@@ -76,7 +76,7 @@ public class AuthenticationIntegrationTest {
 
     @Test
     public void testRegisterValidUser() throws Exception {
-        RegistrationRequest registrationRequest = new RegistrationRequest();
+        RegistrationRequestDto registrationRequest = new RegistrationRequestDto();
         registrationRequest.setEmail("newuser@example.com");
         registrationRequest.setPassword("password");
         registrationRequest.setUsername("newuser");

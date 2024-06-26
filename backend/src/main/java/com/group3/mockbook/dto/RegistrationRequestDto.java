@@ -1,16 +1,16 @@
 package com.group3.mockbook.dto;
 
-public class RegistrationRequest {
+public class RegistrationRequestDto {
     private String email;
     private String password;
     private String username;
     private String securityQuestion;
     private String securityAnswer;
 
-    public RegistrationRequest() {
+    public RegistrationRequestDto() {
     }
 
-    public RegistrationRequest(String email, String password, String username, String securityQuestion, String securityAnswer) {
+    public RegistrationRequestDto(String email, String password, String username, String securityQuestion, String securityAnswer) {
         this.email = email;
         this.password = password;
         this.username = username;

@@ -1,12 +1,12 @@
 package com.group3.mockbook.dto;
 
-public class LoginResponse {
+public class LoginResponseDto {
     private String token;
 
-    public LoginResponse() {
+    public LoginResponseDto() {
     }
 
-    public LoginResponse(String token) {
+    public LoginResponseDto(String token) {
         this.token = token;
     }
 
