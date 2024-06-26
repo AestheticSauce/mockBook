@@ -25,6 +25,13 @@ public class CustomUserDetailService implements UserDetailsService{
     @Autowired
     UserRepository userRepository;
 
+    /**
+     * This method is used to load user-specific data when a user logs in.
+     * It is used by the AuthenticationManager to authenticate a user.
+     * @param email The email of the user
+     * @return UserDetails The user-specific data
+     * @throws UsernameNotFoundException If the user is not found
+     */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         // Implementation goes here
