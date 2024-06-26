@@ -18,8 +18,21 @@ function UserProfile() {
 
     //effect to pull in user data.. will probably implement smarter solution later
     useEffect(() => {
-       setUser(getUserProfile());
-        navigate(`/userprofile/${user.sub}/`);
+        const fetchUser = async () => {
+            try {
+                var usrProfile = await getUserProfile();
+                // get user info
+                // var newUser = fetch("user/{usrprofile.id}")
+                setUser(newUser);
+                navigate(`/userprofile/${newUser.id}/`);
+                setId(newUser.id);
+                setLoading(false);
+            } catch (error) {
+                setError(error);
+                setLoading(false);
+            }
+        };
+        fetchUser();
     }, []);
 
     //handling errors/loading of the page
@@ -29,7 +42,7 @@ function UserProfile() {
 
     const setStatus= async (selectedRole) => {
         try{
-            const response = await axios.put(`http://localhost:8085/v1/api/users/{id}/status`);
+            const response = await axios.put(`http://localhost:8085/v1/api/users/${id}/status`);
             console.log(response.data);
             await setStatus(response.data);
         } catch (error) {
