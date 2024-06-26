@@ -16,7 +16,7 @@ function EditUserProfile() {
 
     //effect to pull in user data.. will probably implement smarter solution later
     useEffect(() => {
-        fetch("http://localhost:8085/v1/api/users/19")
+        fetch("http://localhost:8085/v1/api/users/25")
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network failure');

@@ -62,7 +62,7 @@ public class UserController {
 
     @PutMapping("/{id}/status")
     @ResponseStatus(HttpStatus.OK)
-    public void setStatus(@PathVariable int id, @RequestBody String status) {
+    public void updateStatus(@PathVariable int id, @RequestBody String status) {
         User user = userService.getUserById(id);
         if (user == null) {
             throw new UserNotFoundException(id);

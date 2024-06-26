@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import { useParams } from 'react-router-dom';
+import'../CSS/UserProfileStyle.css'
 function UserProfile() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null); //handling who the user is
     const [loading, setLoading] = useState(true); // To handle loading state
     const [error, setError] = useState(null); // To handle errors
+    const { id } = useParams();
+
     const handleEditClick = () => {
-        navigate(`/userprofile/24/edit`);
+        navigate(`/userprofile/25/edit`);
     };
 
     //effect to pull in user data.. will probably implement smarter solution later
@@ -37,7 +41,7 @@ function UserProfile() {
 
     const setStatus= async (selectedRole) => {
         try{
-            const response = await axios.put(`http://localhost:8085/api/users/{id}/{status}`);
+            const response = await axios.put(`http://localhost:8085/api/users/{id}/status`);
             console.log(response.data);
             await setStatus(response.data);
         } catch (error) {
@@ -47,7 +51,7 @@ function UserProfile() {
 
     const statusChange = (event) => {
         const status = event.target.value;
-        setStatus(user.id,status)
+        setStatus(id,status)
     };
 
     return (
