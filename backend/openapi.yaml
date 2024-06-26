@@ -163,6 +163,44 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /validate-security-question:
+    post:
+      tags:
+      - user
+      operationId: validateSecurityQuestion
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                securityAnswer:
+                  type: string
+      responses:
+        200:
+          description: "Valid security answer"
+        401:
+          description: "Unauthorized"
+  /reset-password:
+    post:
+      tags:
+      - user
+      operationId: resetPassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                newPassword:
+                  type: string
+      responses:
+        200:
+          description: "Password reset successfully"
 components:
   securitySchemes: 
       JWTBearer:
