@@ -10,6 +10,11 @@ import com.group3.mockbook.model.User;
 import com.group3.mockbook.repository.UserRepository;
 import com.group3.mockbook.service.UserService;
 
+/**
+ * UserServiceImpl is a class that implements the UserService interface.
+ * It is used to perform CRUD operations on the User entity.
+ * It is used by the UserController to interact with the database.
+ */
 @Service
 public class UserServiceImpl implements UserService{
 

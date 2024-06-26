@@ -40,7 +40,8 @@ public class SecurityConfig {
 			.csrf((csrf)->csrf.disable())
 			.formLogin((formLogin) -> formLogin.disable())
 			.authorizeHttpRequests((registry) -> registry
-				.requestMatchers("/auth/login").permitAll()
+				.requestMatchers("/auth/login", "/auth/register")
+				.permitAll()
 				.anyRequest().authenticated()
 				)
 
@@ -57,6 +58,6 @@ public class SecurityConfig {
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
+		return new BCryptPasswordEncoder(12);
 	}
 }
