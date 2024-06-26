@@ -36,12 +36,12 @@ public class UserController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public User getUser(@PathVariable int id) {
+    public Optional<User> getUserById(@PathVariable int id) {
         Optional<User> user = userService.getUserById(id);
         if (user.isEmpty()) {
             throw new UserNotFoundException(id);
         } else {
-            return user.get();
+            return user;
         }
     }
     
@@ -64,10 +64,11 @@ public class UserController {
     @PutMapping("/{id}/status")
     @ResponseStatus(HttpStatus.OK)
     public void updateStatus(@PathVariable int id, @RequestBody String status) {
-        User user = userService.getUserById(id);
-        if (user == null) {
+        Optional<User>optionalUser = userService.getUserById(id);
+        if (optionalUser.isEmpty()) {
             throw new UserNotFoundException(id);
         } else {
+            User user = optionalUser.get();
             user.setStatus(status);
             userService.updateUser(user);
         }
@@ -82,11 +83,11 @@ public class UserController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public User updateUser(@PathVariable int id, @RequestBody User userDetails) {
-        User user = userService.getUserById(id);
-        if (user == null) {
+        Optional<User> optionalUser = userService.getUserById(id);
+        if (optionalUser.isEmpty()) {
             throw new UserNotFoundException(id);
         }
-
+        User user = optionalUser.get();
         user.setUsername(userDetails.getUsername());
         user.setBiography(userDetails.getBiography());
         user.setBirthday(userDetails.getBirthday());

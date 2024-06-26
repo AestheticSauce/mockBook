@@ -16,7 +16,7 @@ function EditUserProfile() {
 
     //effect to pull in user data.. will probably implement smarter solution later
     useEffect(() => {
-        fetch("http://localhost:8085/v1/api/users/25")
+        fetch("http://localhost:8085/v1/api/24")
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network failure');
@@ -46,7 +46,7 @@ function EditUserProfile() {
     //Handling clicking the save button, put request and then response from console
     const handleSave = (event) => {
         event.preventDefault();
-        fetch("http://localhost:8085/v1/api/users/19", {
+        fetch("http://localhost:8085/users/24", {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

@@ -38,7 +38,51 @@ public class User {
 
     private String role;
 
+    private String status;
+
+    private String degree;
+
+    private String favFood;
+
+    private String birthday;
+
+    private String biography;
+
     // Getters and Setters
+
+    public String getBiography() {
+        return biography;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
+    }
+    public String getDegree() {
+        return degree;
+    }
+
+    public void setDegree(String degree) {
+        this.degree = degree;
+    }
+
+    public String getFavFood() {
+        return favFood;
+    }
+
+    public void setFavFood(String favFood) {
+        this.favFood = favFood;
+    }
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public void setStatus(String status){this.status=status;}
+
+    public String getStatus(){return status;}
     public boolean isEnabled() {
         return enabled;
     }

@@ -41,7 +41,7 @@ function UserProfile() {
 
     const setStatus= async (selectedRole) => {
         try{
-            const response = await axios.put(`http://localhost:8085/api/users/{id}/status`);
+            const response = await axios.put(`http://localhost:8085/v1/api/users/{id}/status`);
             console.log(response.data);
             await setStatus(response.data);
         } catch (error) {

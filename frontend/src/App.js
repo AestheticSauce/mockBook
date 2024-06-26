@@ -31,7 +31,7 @@ function App() {
         },
         {
             path: '/UserProfile',
-            element: <Navigate to="/userprofile/19" /> //using navigate for hardcoded example, until login is finished
+            element: <Navigate to="/userprofile/25" /> //using navigate for hardcoded example, until login is finished
         },
         {
             path: '/userprofile/:id',

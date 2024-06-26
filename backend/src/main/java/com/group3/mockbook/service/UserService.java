@@ -20,7 +20,6 @@ public interface UserService {
 
     User updateUser(User user);
 
-    User updateStatus(String Status);
 
     void deleteUser(int id);
 }

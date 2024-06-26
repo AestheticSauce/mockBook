@@ -30,6 +30,7 @@ public class SecurityConfig {
 	@Autowired
 	CustomUserDetailService customUserDetailService;
 
+
 	@Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

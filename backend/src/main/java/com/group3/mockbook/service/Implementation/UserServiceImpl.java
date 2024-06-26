@@ -30,7 +30,6 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public Optional<User> getUserById(int id) {
-        // Implementation goes here
         return userRepository.findById(id);
     }
 
