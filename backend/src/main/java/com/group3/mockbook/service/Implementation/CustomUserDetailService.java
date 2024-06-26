@@ -14,6 +14,11 @@ import com.group3.mockbook.model.User;
 import com.group3.mockbook.repository.UserRepository;
 import com.group3.mockbook.security.UserPrincipal;
 
+/**
+ * CustomUserDetailService is a class that implements the UserDetailsService interface.
+ * It is used to load user-specific data when a user logs in. 
+ * It is used by the AuthenticationManager to authenticate a user.
+ */
 @Service
 public class CustomUserDetailService implements UserDetailsService{
 
