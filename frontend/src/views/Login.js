@@ -30,9 +30,10 @@ function Login(){
 
             const data = await response.json();
             jwtUtil.setToken(data.token);
-            const user = jwtUtil.getUserProfile();
+            const user = await jwtUtil.getUserProfile();
+            console.log('user:', user);
             if (user) {
-                navigate(`/userprofile/${user.id}`); // Redirect to user profile page
+                navigate(`/userprofile/${user.sub}`); // Redirect to user profile page
             } else {
                 setError("Failed to decode token. Please try again.");
             }
