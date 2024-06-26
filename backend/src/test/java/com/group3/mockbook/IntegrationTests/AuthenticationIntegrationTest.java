@@ -1,6 +1,7 @@
 package com.group3.mockbook.IntegrationTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.group3.mockbook.dto.RegistrationRequest;
 import com.group3.mockbook.dto.LoginRequest;
 import com.group3.mockbook.dto.LoginResponse;
 
@@ -71,6 +72,22 @@ public class AuthenticationIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(loginRequest)))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void testRegisterValidUser() throws Exception {
+        RegistrationRequest registrationRequest = new RegistrationRequest();
+        registrationRequest.setEmail("newuser@example.com");
+        registrationRequest.setPassword("password");
+        registrationRequest.setUsername("newuser");
+        registrationRequest.setSecurityQuestion("What is your favorite color?");
+        registrationRequest.setSecurityAnswer("Blue");
+    
+        api.perform(post("/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(registrationRequest)))
+                .andExpect(status().isCreated());
+    
     }
 
 }
