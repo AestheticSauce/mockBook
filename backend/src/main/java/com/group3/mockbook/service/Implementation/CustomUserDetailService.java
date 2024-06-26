@@ -1,0 +1,39 @@
+package com.group3.mockbook.service.Implementation;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import com.group3.mockbook.model.User;
+import com.group3.mockbook.repository.UserRepository;
+import com.group3.mockbook.security.UserPrincipal;
+
+@Service
+public class CustomUserDetailService implements UserDetailsService{
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        // Implementation goes here
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException("User not found with email "+email);
+        }
+        UserPrincipal userPrincipal = new UserPrincipal();
+        userPrincipal.setId(user.get().getId());
+        userPrincipal.setUsername(user.get().getEmail());
+        userPrincipal.setPassword(user.get().getPassword());
+        userPrincipal.setEnabled(user.get().isEnabled());
+        userPrincipal.setAuthorities(List.of(new SimpleGrantedAuthority(user.get().getRole())));
+        return userPrincipal;
+    }
+    
+}

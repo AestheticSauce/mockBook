@@ -24,16 +24,6 @@ public class User {
 
     private String password;
 
-    private String biography;
-
-    private String birthday;
-
-    private String degree;
-
-    private String favFood;
-
-    private String Status;
-
     @CreationTimestamp
     private Timestamp created_at;
 
@@ -44,15 +34,18 @@ public class User {
 
     private String security_answer;
 
+    private boolean enabled;
+
+    private String role;
+
     // Getters and Setters
-    public String getStatus() {
-        return Status;
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setStatus(String status) {
-        Status = status;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
-
 
     public String getUsername() {
         return username;
@@ -117,37 +110,15 @@ public class User {
     public void setSecurity_answer(String security_answer) {
         this.security_answer = security_answer;
     }
-    public String getBiography() {
-        return biography;
+
+    public String getRole() {
+        return role;
     }
 
-    public void setBiography(String biography) {
-        this.biography = biography;
+    public void setRole(String roles) {
+        this.role = role;
     }
 
-    public String getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
-    }
-
-    public String getDegree() {
-        return degree;
-    }
-
-    public void setDegree(String degree) {
-        this.degree = degree;
-    }
-
-    public String getFavFood() {
-        return favFood;
-    }
-
-    public void setFavFood(String favFood) {
-        this.favFood = favFood;
-    }
     public User() {
     }
 
