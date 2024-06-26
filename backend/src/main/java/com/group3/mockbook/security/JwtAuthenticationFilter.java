@@ -16,29 +16,29 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     
-        @Autowired
-        private JwtDecoder jwtDecoder;
+    @Autowired
+    private JwtDecoder jwtDecoder;
 
-        @Autowired
-        private JwtToPrincipalConverter jwtToUserConverter;
+    @Autowired
+    private JwtToPrincipalConverter jwtToUserConverter;
 
-        @Override
-        protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                FilterChain filterChain) throws ServletException, IOException {
-            extractTokenFromRequest(request)
-                .map(jwtDecoder::decode)
-                .map(jwtToUserConverter::convert)
-                .map(UserPrincipalAuthenticationToken::new)
-                .ifPresent(authentication -> SecurityContextHolder.getContext().setAuthentication(authentication));
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
+        extractTokenFromRequest(request)
+            .map(jwtDecoder::decode)
+            .map(jwtToUserConverter::convert)
+            .map(UserPrincipalAuthenticationToken::new)
+            .ifPresent(authentication -> SecurityContextHolder.getContext().setAuthentication(authentication));
 
-            filterChain.doFilter(request, response);
+        filterChain.doFilter(request, response);
+    }
+
+    private Optional<String> extractTokenFromRequest(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            return Optional.of(token.substring(7));
         }
-
-        private Optional<String> extractTokenFromRequest(HttpServletRequest request) {
-            String token = request.getHeader("Authorization");
-            if (token != null && token.startsWith("Bearer ")) {
-                return Optional.of(token.substring(7));
-            }
-            return Optional.empty();
-        }
+        return Optional.empty();
+    }
 }
