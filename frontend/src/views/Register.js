@@ -14,7 +14,7 @@ function Register() {
   const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = (data) => {
-    fetch("http://localhost:8085/v1/api/users", {
+    fetch("http://localhost:8085/v1/api/auth/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -25,8 +25,6 @@ function Register() {
         if (!response.ok) {
           setError("root.serverError", {type: response.status, message: response.statusText})
         }
-        const user = response.json();
-        console.log(user);
         redirect("/Login");
       })
       .catch((error) => {
