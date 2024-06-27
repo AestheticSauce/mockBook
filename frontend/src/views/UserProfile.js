@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {getToken, getUserProfile} from "../jwt"; // Assuming you use react-router-dom
+import {getToken, getUserProfile} from "../jwt";
+import axios from "axios"; // Assuming you use react-router-dom
 
 function UserProfileComponent() {
     const [user, setUser] = useState(null);
@@ -8,9 +9,9 @@ function UserProfileComponent() {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
-    // const handleEditClick = () => {
-    //     navigate(`/userprofile/${id}/edit`);
-    // };
+    const handleEditClick = () => {
+        navigate(`/userprofile/${user.id}/edit`);
+    };
 
     // Effect to pull in user data
     useEffect(() => {
@@ -50,45 +51,45 @@ function UserProfileComponent() {
     }, [navigate]);
 
 
-    // const setStatus = async (selectedStatus) => {
-    //     try {
-    //         const response = await axios.put(`http://localhost:8085/v1/api/users/${id}/status`, {
-    //             status: selectedStatus
-    //         }, {
-    //             headers: {
-    //                 'Authorization': `Bearer ${getToken()}`,
-    //                 'Content-Type': 'application/json',
-    //             }
-    //         });
-    //         console.log(response.data);
-    //     } catch (error) {
-    //         console.error(`Error changing status`, error);
-    //     }
-    // };
-    //
-    // const statusChange = (event) => {
-    //     const status = event.target.value;
-    //     setStatus(status);
-    // };
+    const setStatus = async (selectedStatus) => {
+        try {
+            const response = await axios.put(`http://localhost:8085/v1/api/users/${user.id}/status`, {
+                status: selectedStatus
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${getToken()}`,
+                    'Content-Type': 'application/json',
+                }
+            });
+            console.log(response.data);
+        } catch (error) {
+            console.error(`Error changing status`, error);
+        }
+    };
+
+    const statusChange = (event) => {
+        const status = event.target.value;
+        setStatus(status);
+    };
 
     return (
         <>
             <div>
-                <h1>{user}</h1>
-        {/*        <p>Email: {user.email}</p>*/}
-        {/*        <p>Bio: {user.biography}</p>*/}
-        {/*        <p>Favourite food: {user.favFood}</p>*/}
-        {/*        <p>Birthday: {user.degree}</p>*/}
-        {/*        <button onClick={handleEditClick}>Edit Profile</button>*/}
-        {/*    </div>*/}
-        {/*    <div>*/}
-        {/*        <select name="status" onChange={statusChange} style={{ padding: '10px', borderRadius: '5px',*/}
-        {/*            border: '1px solid #ccc' }}>*/}
-        {/*            <option value="">user.status</option>*/}
-        {/*            <option value="Online">Online</option>*/}
-        {/*            <option value="Do not disturb">Do not disturb</option>*/}
-        {/*            <option value="Offline">Offline</option>*/}
-        {/*        </select>*/}
+                <h1>{user?.username || "User"}</h1>
+                <p>Email: {user?.email || "No email provided"}</p>
+                <p>Bio: {user?.biography || "No biography available"}</p>
+                <p>Favourite food: {user?.favFood || "No favorite food listed"}</p>
+                <p>Birthday: {user?.birthday || "No birthday provided"}</p>
+                <button onClick={handleEditClick}>Edit Profile</button>
+            </div>
+            <div>
+                <select name="status" onChange={statusChange} style={{ padding: '10px', borderRadius: '5px',
+                    border: '1px solid #ccc' }}>
+                    <option value="">user.status</option>
+                    <option value="Online">Online</option>
+                    <option value="Do not disturb">Do not disturb</option>
+                    <option value="Offline">Offline</option>
+                </select>
             </div>
         </>
     );
