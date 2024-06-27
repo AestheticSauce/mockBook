@@ -39,7 +39,7 @@ public class SecurityConfig {
 			.csrf((csrf)->csrf.disable())
 			.formLogin((formLogin) -> formLogin.disable())
 			.authorizeHttpRequests((registry) -> registry
-				.requestMatchers("/auth/login", "/auth/register")
+				.requestMatchers("/auth/login", "/auth/register", "/auth/password-reset")
 				.permitAll()
 				.anyRequest().authenticated()
 				)

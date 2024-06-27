@@ -2,7 +2,6 @@ package com.group3.mockbook.service;
 
 import com.group3.mockbook.model.FriendRequest;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface FriendRequestService {

@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
+import com.group3.mockbook.exceptions.UserNotFoundException;
 import com.group3.mockbook.model.User;
 import com.group3.mockbook.repository.UserRepository;
 import com.group3.mockbook.service.UserService;
@@ -67,5 +69,20 @@ public class UserServiceImpl implements UserService{
     public void deleteUser(int id) {
         // Implementation goes here
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public void resetPassword(String email, String securityAnswer, String newPassword) {
+        // Implementation goes here
+        Optional<User> user = userRepository.findByEmail(email);
+        if(user.isPresent()) {
+            if(!user.get().getSecurity_answer().equals(securityAnswer)) {
+                throw new BadCredentialsException("Invalid security answer");
+            }
+            user.get().setPassword(newPassword);
+            userRepository.save(user.get());
+        } else{
+            throw new UserNotFoundException(email);
+        }
     }
 }

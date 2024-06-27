@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group3.mockbook.dto.RegistrationRequestDto;
 import com.group3.mockbook.dto.LoginRequestDto;
 import com.group3.mockbook.dto.LoginResponseDto;
+import com.group3.mockbook.dto.PasswordResetDto;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,8 @@ public class AuthenticationIntegrationTest {
                         .content(new ObjectMapper().writeValueAsString(loginRequest)))
                 .andExpect(status().isOk())
                 .andReturn();
-        LoginResponseDto loginResponse = new ObjectMapper().readValue(loginResult.getResponse().getContentAsString(), LoginResponseDto.class);
+        LoginResponseDto loginResponse = new ObjectMapper()
+                .readValue(loginResult.getResponse().getContentAsString(), LoginResponseDto.class);
         assertNotNull(loginResponse.getToken());
     }
 
@@ -82,12 +84,26 @@ public class AuthenticationIntegrationTest {
         registrationRequest.setUsername("newuser");
         registrationRequest.setSecurityQuestion("What is your favorite color?");
         registrationRequest.setSecurityAnswer("Blue");
-    
+
         api.perform(post("/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(registrationRequest)))
                 .andExpect(status().isCreated());
-    
+
+    }
+
+    @Test
+    public void testPasswordResetValid() throws Exception {
+        PasswordResetDto resetDto = new PasswordResetDto("user1@example.com", "Fluffy",
+                "newPassword");
+
+        api.perform(put("/auth/password-reset")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(resetDto)))
+                .andExpect(status().isNoContent());
+
+        // Optional: Verify the password was actually changed by attempting to log in
+        // with the new password.
     }
 
 }
