@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value=BadCredentialsException.class)
     public ResponseEntity<String> handleUserNotFoundException(BadCredentialsException e) {
-        ResponseEntity<String> response = new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        ResponseEntity<String> response = new ResponseEntity<String>("YOU ARE NOT AUTHORIZED! SET YOUR JWT BEARER TOKEN!", HttpStatus.UNAUTHORIZED);
         return response;
     }
 

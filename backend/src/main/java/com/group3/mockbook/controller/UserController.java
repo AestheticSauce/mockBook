@@ -2,6 +2,7 @@ package com.group3.mockbook.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.group3.mockbook.dto.User.UserDTO;
 import com.group3.mockbook.exceptions.UserNotFoundException;
 import com.group3.mockbook.model.User;
 import com.group3.mockbook.service.UserService;
@@ -9,6 +10,7 @@ import com.group3.mockbook.service.UserService;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -28,9 +30,13 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    ModelMapper modelMapper;
+
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public User postUser(@RequestBody User user) {
+    public User postUser(@RequestBody UserDTO userDto) {
+        User user = modelMapper.map(userDto, User.class);
         return userService.saveUser(user);
     }
 
@@ -53,7 +59,8 @@ public class UserController {
 
     @PutMapping("")
     @ResponseStatus(HttpStatus.OK)
-    public User updateUser(@RequestBody User user) {
+    public User updateUser(@RequestBody UserDTO userDto) {
+        User user = modelMapper.map(userDto, User.class);
         return userService.updateUser(user);
     }
 

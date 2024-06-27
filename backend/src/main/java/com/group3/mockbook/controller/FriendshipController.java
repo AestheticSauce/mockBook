@@ -2,12 +2,12 @@ package com.group3.mockbook.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.group3.mockbook.dto.FriendRequestDto;
+import com.group3.mockbook.dto.Friendship.FriendRequestDto;
 import com.group3.mockbook.exceptions.UserNotFoundException;
-import com.group3.mockbook.model.FriendRequest;
+import com.group3.mockbook.model.Friendship;
 import com.group3.mockbook.model.User;
 import com.group3.mockbook.security.UserPrincipal;
-import com.group3.mockbook.service.FriendRequestService;
+import com.group3.mockbook.service.FriendshipService;
 import com.group3.mockbook.service.UserService;
 
 import java.security.Principal;
@@ -28,40 +28,49 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
 
 @RestController
-@RequestMapping("/friend-requests")
-public class FriendRequestController {  
+@RequestMapping("/friendships")
+public class FriendshipController {  
 
     @Autowired
-    private FriendRequestService friendRequestService;
+    private FriendshipService friendRequestService;
     
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public FriendRequest requestNewFriend(@CurrentSecurityContext(expression="authentication.principal") UserPrincipal userPrincipal, @RequestBody FriendRequestDto requestDTO) {
+    public Friendship requestNewFriend(@CurrentSecurityContext(expression="authentication.principal") UserPrincipal userPrincipal, @RequestBody FriendRequestDto requestDTO) {
         return friendRequestService.requestFriendship(userPrincipal.getId(), requestDTO.getTargetId());
     }
     
     @PutMapping("/{id}/accept")
     @ResponseStatus(HttpStatus.OK)
-    public FriendRequest acceptFriendRequest(@PathVariable Integer id) {
+    public Friendship acceptFriendRequest(@PathVariable Integer id) {
         return friendRequestService.acceptFriendshipRequest(id);
     }
     
     @PutMapping("/{id}/reject")
     @ResponseStatus(HttpStatus.OK)
-    public FriendRequest rejectFriendRequest(@PathVariable Integer id) {
+    public Friendship rejectFriendRequest(@PathVariable Integer id) {
         return friendRequestService.rejectFriendshipRequest(id);
     }
     
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteFriendRequest(@PathVariable Integer id) {
+    public void deleteFriendship(@PathVariable Integer id) {
         friendRequestService.deleteFriendship(id);
+    }
+
+    @GetMapping("/requests")
+    public List<Friendship> getFriendRequests(@CurrentSecurityContext(expression="authentication.principal") UserPrincipal userPrincipal) {
+        return friendRequestService.getFriendshipRequests(userPrincipal.getId());
+    }
+
+    @GetMapping("")
+    public List<Friendship> getFriendships(@CurrentSecurityContext(expression="authentication.principal") UserPrincipal userPrincipal) {
+        return friendRequestService.getFriendships(userPrincipal.getId());
     }
     
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<FriendRequest> getFriendRequest(@PathVariable Integer id) {
-        Optional<FriendRequest> friendRequest = friendRequestService.getFriendshipDetails(id);
-        return friendRequest.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Friendship> getFriendship(@PathVariable Integer id) {
+        return ResponseEntity.of(friendRequestService.getFriendshipDetails(id));
     }
 }

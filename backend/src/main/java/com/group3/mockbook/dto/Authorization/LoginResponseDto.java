@@ -1,4 +1,4 @@
-package com.group3.mockbook.dto;
+package com.group3.mockbook.dto.Authorization;
 
 public class LoginResponseDto {
     private String token;

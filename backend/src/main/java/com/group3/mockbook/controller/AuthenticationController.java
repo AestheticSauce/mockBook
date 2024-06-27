@@ -4,11 +4,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.group3.mockbook.dto.RegistrationRequestDto;
+import com.group3.mockbook.dto.Authorization.LoginResponseDto;
+import com.group3.mockbook.dto.Authorization.RegistrationRequestDto;
 import com.group3.mockbook.model.User;
-import com.group3.mockbook.dto.LoginResponseDto;
 import com.group3.mockbook.security.JwtIssuer;
 import com.group3.mockbook.security.UserPrincipal;
+import com.group3.mockbook.service.AuthenticationService;
 import com.group3.mockbook.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,45 +29,17 @@ import org.springframework.http.HttpStatus;
 public class AuthenticationController {
 
     @Autowired
-    AuthenticationManager authenticationManager;
-
-    @Autowired
-    JwtIssuer jwtIssuer;
-
-    @Autowired
-    UserService userService;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private AuthenticationService authenticationService;
 
     @PostMapping("/login")
     public LoginResponseDto postLoginRequest(@RequestBody @Validated RegistrationRequestDto request) {
-        
-        Authentication auth = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-
-        SecurityContextHolder.getContext().setAuthentication(auth);
-
-        var principal = (UserPrincipal) auth.getPrincipal();
-
-        String token = jwtIssuer.issue(principal.getId(), principal.getUsername(), principal.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
-
-        // Implementation goes here
-        return new LoginResponseDto(token);
+        return authenticationService.login(request.getEmail(), request.getPassword());
     }
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public void postRegisterRequest(@RequestBody @Validated RegistrationRequestDto request) {
-        User user = new User();
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setUsername(request.getUsername());
-        user.setSecurity_question(request.getSecurityQuestion());
-        user.setSecurity_answer(request.getSecurityAnswer());
-        user.setRole("USER");
-        user.setEnabled(true);
-        userService.saveUser(user);
+        authenticationService.register(request);
     }
 
 }

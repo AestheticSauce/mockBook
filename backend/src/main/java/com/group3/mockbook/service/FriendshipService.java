@@ -1,0 +1,16 @@
+package com.group3.mockbook.service;
+
+import com.group3.mockbook.model.Friendship;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface FriendshipService {
+    Friendship requestFriendship(Integer sourceId, Integer targetId);
+    Friendship acceptFriendshipRequest(Integer id);
+    Friendship rejectFriendshipRequest(Integer id);
+    void deleteFriendship(Integer id);
+    Optional<Friendship> getFriendshipDetails(Integer id);
+    List<Friendship> getFriendshipRequests(Integer userId);
+    List<Friendship> getFriendships(Integer userId);
+}

@@ -1,8 +1,8 @@
 package com.group3.mockbook.IntegrationTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.group3.mockbook.dto.FriendRequestDto;
-import com.group3.mockbook.model.FriendRequest;
+import com.group3.mockbook.dto.Friendship.FriendRequestDto;
+import com.group3.mockbook.model.Friendship;
 import com.group3.mockbook.utilities.WithMockUser;
 
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 @ContextConfiguration
 @AutoConfigureMockMvc
-public class FriendRequestIntegrationTest {
+public class FriendshipIntegrationTest {
 
     @Autowired
     private MockMvc api;
@@ -39,7 +39,7 @@ public class FriendRequestIntegrationTest {
 
         String newRequestJson = new ObjectMapper().writeValueAsString(newRequest);
 
-        api.perform(post("/friend-requests")
+        api.perform(post("/friendships")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(newRequestJson))
                 .andExpect(status().isCreated());
@@ -49,7 +49,7 @@ public class FriendRequestIntegrationTest {
     @WithMockUser
     public void testAcceptFriendRequest() throws Exception {
         Integer requestId = 1; // Example request ID
-        api.perform(put("/friend-requests/" + requestId + "/accept"))
+        api.perform(put("/friendships/" + requestId + "/accept"))
                 .andExpect(status().isOk());
     }
 
@@ -57,7 +57,7 @@ public class FriendRequestIntegrationTest {
     @WithMockUser
     public void testRejectFriendRequest() throws Exception {
         Integer requestId = 1; // Example request ID
-        api.perform(put("/friend-requests/" + requestId + "/reject"))
+        api.perform(put("/friendships/" + requestId + "/reject"))
                 .andExpect(status().isOk());
     }
 
@@ -65,7 +65,7 @@ public class FriendRequestIntegrationTest {
     @WithMockUser
     public void testDeleteFriendRequest() throws Exception {
         Integer requestId = 1; // Example request ID
-        api.perform(delete("/friend-requests/" + requestId))
+        api.perform(delete("/friendships/" + requestId))
                 .andExpect(status().isNoContent());
     }
 
@@ -73,7 +73,8 @@ public class FriendRequestIntegrationTest {
     @WithMockUser
     public void testGetFriendRequest() throws Exception {
         Integer requestId = 1; // Example request ID
-        api.perform(get("/friend-requests/" + requestId))
+        api.perform(get("/friendships/" + requestId))
                 .andExpect(status().isOk());
     }
+    
 }

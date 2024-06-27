@@ -5,15 +5,15 @@ import java.sql.Timestamp;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class FriendRequest {
+public class Friendship {
     public enum RequestStatus {
         PENDING,
         ACCEPTED,
@@ -24,9 +24,11 @@ public class FriendRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private int sourceId;
+    @ManyToOne()
+    private User sourceUser;
 
-    private int targetId;
+    @ManyToOne()
+    private User targetUser;
 
     private RequestStatus status;
 
@@ -36,12 +38,12 @@ public class FriendRequest {
     @UpdateTimestamp
     private Timestamp updatedAt;
 
-    public FriendRequest() {
+    public Friendship() {
     }
 
-    public FriendRequest(int sourceId, int targetId, RequestStatus status) {
-        this.sourceId = sourceId;
-        this.targetId = targetId;
+    public Friendship(User sourceuser, User targetUser, RequestStatus status) {
+        this.sourceUser = sourceuser;
+        this.targetUser = targetUser;
         this.status = status;
     }
 
@@ -77,19 +79,19 @@ public class FriendRequest {
         this.updatedAt = updatedAt;
     }
 
-    public int getSourceId() {
-        return sourceId;
+    public User getSourceUser() {
+        return sourceUser;
     }
 
-    public void setSourceId(int sourceId) {
-        this.sourceId = sourceId;
+    public void setSourceUser(User sourceUser) {
+        this.sourceUser = sourceUser;
     }
 
-    public int getTargetId() {
-        return targetId;
+    public User getTargetUser() {
+        return targetUser;
     }
 
-    public void setTargetId(int targetId) {
-        this.targetId = targetId;
+    public void setTargetUser(User targetUser) {
+        this.targetUser = targetUser;
     }
 }
