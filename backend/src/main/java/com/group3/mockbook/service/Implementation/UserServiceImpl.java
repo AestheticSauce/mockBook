@@ -7,9 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
-import com.group3.mockbook.exceptions.UserNotFoundException;
+import com.group3.mockbook.exceptions.EntityNotFoundException;
 import com.group3.mockbook.model.User;
 import com.group3.mockbook.repository.UserRepository;
+import com.group3.mockbook.service.PostService;
 import com.group3.mockbook.service.UserService;
 
 /**
@@ -82,7 +83,7 @@ public class UserServiceImpl implements UserService{
             user.get().setPassword(newPassword);
             userRepository.save(user.get());
         } else{
-            throw new UserNotFoundException(email);
+            throw new EntityNotFoundException(email);
         }
     }
 }
