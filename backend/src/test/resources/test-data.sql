@@ -20,3 +20,7 @@ VALUES (DEFAULT, 2, 3, 0);
 -- Friend request from user3 to user1, already accepted for testing accept/reject functionality
 INSERT INTO friend_request (id, source_id, target_id, status)
 VALUES (DEFAULT, 3, 1, 1);
+
+-- Post from user1
+INSERT INTO post (id, author_id, content, title)
+VALUES (DEFAULT, 1, 'Hello, world!', 'First post');
