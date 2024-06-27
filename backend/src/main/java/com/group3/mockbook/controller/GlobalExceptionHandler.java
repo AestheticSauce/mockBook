@@ -6,12 +6,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 
-import com.group3.mockbook.exceptions.UserNotFoundException;
+import com.group3.mockbook.exceptions.EntityNotFoundException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(value=UserNotFoundException.class)
-    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException e) {
+    @ExceptionHandler(value=EntityNotFoundException.class)
+    public ResponseEntity<String> handleUserNotFoundException(EntityNotFoundException e) {
         ResponseEntity<String> response = new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
         return response;
     }
