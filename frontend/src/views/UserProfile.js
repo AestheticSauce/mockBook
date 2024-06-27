@@ -1,31 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from "axios";
-import { useParams } from 'react-router-dom';
-import {getUserId, getUserProfile, verifyJwt} from "../jwt.js";
-function UserProfile() {
+import {getToken, getUserProfile} from "../jwt"; // Assuming you use react-router-dom
+
+function UserProfileComponent() {
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
-    const [user, setUser] = useState(null); //handling who the user is
-    const [loading, setLoading] = useState(true); // To handle loading state
-    const [error, setError] = useState(null); // To handle errors
-    const [ id,setId] = useState(null);
 
-    const handleEditClick = () => {
-        navigate(`/userprofile/25/edit`);
-    };
+    // const handleEditClick = () => {
+    //     navigate(`/userprofile/${id}/edit`);
+    // };
 
-
-
-    //effect to pull in user data.. will probably implement smarter solution later
+    // Effect to pull in user data
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                var usrProfile = await getUserProfile();
-                // get user info
-                // var newUser = fetch("user/{usrprofile.id}")
-                setUser(newUser);
-                navigate(`/userprofile/${newUser.id}/`);
-                setId(newUser.id);
+                const userProfile = await getUserProfile();
+                const token =getToken().trim();
+                console.log(`Token ${token}`);
+                const myHeaders = {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                };
+                console.log('Headers:', myHeaders);
+                const requestOptions = {
+                    method: "GET",
+                    headers: myHeaders,
+                    redirect: "follow"
+                };
+
+                const response = await fetch(`http://localhost:8085/v1/api/users/${userProfile.id}`, requestOptions)
+                console.log('Response Headers:', response.headers);
+                console.log('Response Status:', response.status);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const result = await response.json();
+                setUser(result);
+                navigate(`/userprofile/${result.id}/`);
                 setLoading(false);
             } catch (error) {
                 setError(error);
@@ -33,49 +47,51 @@ function UserProfile() {
             }
         };
         fetchUser();
-    }, []);
+    }, [navigate]);
 
-    //handling errors/loading of the page
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
-    if (!user) return <div>No user data available</div>;
 
-    const setStatus= async (selectedRole) => {
-        try{
-            const response = await axios.put(`http://localhost:8085/v1/api/users/${id}/status`);
-            console.log(response.data);
-            await setStatus(response.data);
-        } catch (error) {
-            console.error(`Error changing status`, error);
-        }
-    };
-
-    const statusChange = (event) => {
-        const status = event.target.value;
-        setStatus(id,status)
-    };
+    // const setStatus = async (selectedStatus) => {
+    //     try {
+    //         const response = await axios.put(`http://localhost:8085/v1/api/users/${id}/status`, {
+    //             status: selectedStatus
+    //         }, {
+    //             headers: {
+    //                 'Authorization': `Bearer ${getToken()}`,
+    //                 'Content-Type': 'application/json',
+    //             }
+    //         });
+    //         console.log(response.data);
+    //     } catch (error) {
+    //         console.error(`Error changing status`, error);
+    //     }
+    // };
+    //
+    // const statusChange = (event) => {
+    //     const status = event.target.value;
+    //     setStatus(status);
+    // };
 
     return (
         <>
-        <div>
-            <h1>{user.username}</h1>
-            <p>Email: {user.email}</p>
-            <p>Bio: {user.biography}</p>
-            <p>Favourite food: {user.favFood}</p>
-            <p>Birthday: {user.degree}</p>
-            <button onClick={handleEditClick}>Edit Profile</button>
-        </div>
-        <div>
-            <select name="status" onChange={statusChange} style={{ padding: '10px', borderRadius: '5px',
-                border: '1px solid #ccc' }}>
-                <option value="">user.status</option>
-                <option value="Online">Online</option>
-                <option value="Do not disturb">Do not disturb</option>
-                <option value="Offline">Offline</option>
-            </select>
-        </div>
+            <div>
+                <h1>{user}</h1>
+        {/*        <p>Email: {user.email}</p>*/}
+        {/*        <p>Bio: {user.biography}</p>*/}
+        {/*        <p>Favourite food: {user.favFood}</p>*/}
+        {/*        <p>Birthday: {user.degree}</p>*/}
+        {/*        <button onClick={handleEditClick}>Edit Profile</button>*/}
+        {/*    </div>*/}
+        {/*    <div>*/}
+        {/*        <select name="status" onChange={statusChange} style={{ padding: '10px', borderRadius: '5px',*/}
+        {/*            border: '1px solid #ccc' }}>*/}
+        {/*            <option value="">user.status</option>*/}
+        {/*            <option value="Online">Online</option>*/}
+        {/*            <option value="Do not disturb">Do not disturb</option>*/}
+        {/*            <option value="Offline">Offline</option>*/}
+        {/*        </select>*/}
+            </div>
         </>
     );
 }
 
-export default UserProfile;
+export default UserProfileComponent;
