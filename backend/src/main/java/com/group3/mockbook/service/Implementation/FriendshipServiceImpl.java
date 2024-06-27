@@ -32,6 +32,8 @@ public class FriendshipServiceImpl implements FriendshipService {
         // set the target user
         friendship.setTargetUser(userService.getUserById(targetId).get());
 
+        friendship.setStatus(Friendship.RequestStatus.PENDING);
+
         // save the friendship request
         return friendshipRepository.save(friendship);
     }
