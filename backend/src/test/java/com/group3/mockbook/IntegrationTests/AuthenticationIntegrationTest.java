@@ -106,4 +106,23 @@ public class AuthenticationIntegrationTest {
         // with the new password.
     }
 
+    @Test
+    public void testPasswordResetInvalidEmail() throws Exception {
+        PasswordResetDto resetDto = new PasswordResetDto("invalidemail@example.com", "Fluffy", "newPassword");
+
+        api.perform(put("/auth/password-reset")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(resetDto)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testPasswordResetIncorrectSecurityAnswer() throws Exception {
+        PasswordResetDto resetDto = new PasswordResetDto("user1@example.com", "WrongAnswer", "newPassword");
+
+        api.perform(put("/auth/password-reset")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(resetDto)))
+                .andExpect(status().isUnauthorized());
+    }
 }
