@@ -33,12 +33,6 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationService authenticationService;
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @PostMapping("/login")
     public LoginResponseDto postLoginRequest(@RequestBody @Validated RegistrationRequestDto request) {
         return authenticationService.login(request.getEmail(), request.getPassword());
@@ -53,6 +47,6 @@ public class AuthenticationController {
     @PutMapping("/password-reset")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void putPasswordReset(@RequestBody PasswordResetDto resetDto) {
-        userService.resetPassword(resetDto.getEmail(), resetDto.getSecurityAnswer(), passwordEncoder.encode(resetDto.getNewPassword()));
+        authenticationService.resetPassword(resetDto.getEmail(), resetDto.getSecurityAnswer(), resetDto.getNewPassword());
     }
 }

@@ -3,9 +3,10 @@ package com.group3.mockbook.controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.group3.mockbook.dto.User.UserDTO;
-import com.group3.mockbook.exceptions.EntityNotFoundException;
 import com.group3.mockbook.model.User;
 import com.group3.mockbook.service.UserService;
+
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +46,7 @@ public class UserController {
     public User getUser(@PathVariable int id) {
         Optional<User> user = userService.getUserById(id);
         if (user.isEmpty()) {
-            throw new EntityNotFoundException(id);
+            throw new EntityNotFoundException("User not found with id: " + id);
         } else {
             return user.get();
         }

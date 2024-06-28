@@ -22,7 +22,7 @@ public class Post {
 
     private String content;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     private User author;
 
     @CreationTimestamp

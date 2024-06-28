@@ -8,4 +8,6 @@ public interface AuthenticationService {
     public LoginResponseDto login(String email, String password);
 
     public void register(RegistrationRequestDto request);
+
+    public void resetPassword(String email, String securityAnswer, String newPassword);
 }

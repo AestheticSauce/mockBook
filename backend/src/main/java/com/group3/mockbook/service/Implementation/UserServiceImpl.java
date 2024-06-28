@@ -8,11 +8,12 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import com.group3.mockbook.dto.User.UserDTO;
-import com.group3.mockbook.exceptions.EntityNotFoundException;
 import com.group3.mockbook.model.User;
 import com.group3.mockbook.repository.UserRepository;
 import com.group3.mockbook.service.PostService;
 import com.group3.mockbook.service.UserService;
+
+import jakarta.persistence.EntityNotFoundException;
 
 /**
  * UserServiceImpl is a class that implements the UserService interface.

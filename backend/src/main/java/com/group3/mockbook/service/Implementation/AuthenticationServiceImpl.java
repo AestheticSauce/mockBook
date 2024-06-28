@@ -1,13 +1,17 @@
 package com.group3.mockbook.service.Implementation;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException.Unauthorized;
 
 import com.group3.mockbook.dto.Authorization.LoginResponseDto;
 import com.group3.mockbook.dto.Authorization.RegistrationRequestDto;
@@ -16,6 +20,8 @@ import com.group3.mockbook.security.JwtIssuer;
 import com.group3.mockbook.security.UserPrincipal;
 import com.group3.mockbook.service.AuthenticationService;
 import com.group3.mockbook.service.UserService;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -58,6 +64,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setRole("USER");
         user.setEnabled(true);
         userService.saveUser(user);
+    }
+
+    @Override
+    public void resetPassword(String email, String securityAnswer, String newPassword) {
+        Optional<User> user = userService.getUserByEmail(email);
+        if (user.isEmpty()) {
+            throw new EntityNotFoundException("User not found with email: " + email);
+        }
+
+        if (user.get().getSecurityAnswer().equals(securityAnswer)) {
+            user.get().setPassword(passwordEncoder.encode(newPassword));
+            userService.saveUser(user.get());
+        } else{
+            throw new BadCredentialsException("Security answer is incorrect");
+        }
     }
     
 }

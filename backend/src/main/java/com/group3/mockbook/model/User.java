@@ -40,11 +40,17 @@ public class User {
     @UpdateTimestamp
     private Timestamp updatedAt;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "sourceUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Friendship> sourceFriendships = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "targetUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Friendship> targetFriendships = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Post> posts;
 
     private String securityQuestion;
 

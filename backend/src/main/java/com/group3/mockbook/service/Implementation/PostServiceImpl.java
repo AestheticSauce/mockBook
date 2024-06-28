@@ -7,12 +7,13 @@ import org.springframework.stereotype.Service;
 
 import com.group3.mockbook.dto.Post.CreatePostDto;
 import com.group3.mockbook.dto.Post.UpdatePostDto;
-import com.group3.mockbook.exceptions.EntityNotFoundException;
 import com.group3.mockbook.model.Post;
 import com.group3.mockbook.repository.PostRepository;
 import com.group3.mockbook.security.UserPrincipal;
 import com.group3.mockbook.service.PostService;
 import com.group3.mockbook.service.UserService;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class PostServiceImpl implements PostService{
@@ -40,7 +41,7 @@ public class PostServiceImpl implements PostService{
         if (post.isPresent()) {
             return post.get();
         } else {
-            throw new EntityNotFoundException(id);
+            throw new EntityNotFoundException("post with id " + id + " not found");
         }
     }
 
@@ -63,7 +64,7 @@ public class PostServiceImpl implements PostService{
 
         // check if user is the author of the post
         if (post.getAuthor().getId() != userPrincipal.getId()) {
-            throw new EntityNotFoundException(id);
+            throw new EntityNotFoundException("post with id " + id + " not found");
         }
 
         postRepository.delete(post);

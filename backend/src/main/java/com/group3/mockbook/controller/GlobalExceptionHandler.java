@@ -2,11 +2,12 @@ package com.group3.mockbook.controller;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-
-import com.group3.mockbook.exceptions.EntityNotFoundException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -17,8 +18,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value=BadCredentialsException.class)
-    public ResponseEntity<String> handleUserNotFoundException(BadCredentialsException e) {
-        ResponseEntity<String> response = new ResponseEntity<String>("YOU ARE NOT AUTHORIZED! SET YOUR JWT BEARER TOKEN!", HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<String> handleBadCredentialsException(BadCredentialsException e) {
+        ResponseEntity<String> response = new ResponseEntity<String>("YOU ARE NOT AUTHORIZED! CHECK YOUR CREDENTIALS!", HttpStatus.UNAUTHORIZED);
         return response;
     }
 
