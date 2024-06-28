@@ -1,5 +1,6 @@
 package com.group3.mockbook.IntegrationTests;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group3.mockbook.dto.Friendship.FriendRequestDto;
 import com.group3.mockbook.model.Friendship;
@@ -15,11 +16,15 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.util.List;
 
 @Sql({ "/test-data.sql" })
 @ActiveProfiles("test")
@@ -75,6 +80,17 @@ public class FriendshipIntegrationTest {
         Integer requestId = 1; // Example request ID
         api.perform(get("/friendships/" + requestId))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser
+    public void testGetFriendships() throws Exception {
+        MvcResult resp = api.perform(get("/friendships"))
+            .andExpect(status().isOk())
+            .andReturn();
+        String json = resp.getResponse().getContentAsString();
+        List<Friendship> friends = new ObjectMapper().readValue(json, new TypeReference<List<Friendship>>() {});
+        assertEquals(friends.size(), 2);
     }
     
 }
