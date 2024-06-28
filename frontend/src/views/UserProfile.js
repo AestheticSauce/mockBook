@@ -8,9 +8,9 @@ function UserProfileComponent() {
         const [error, setError] = useState(null);
         const navigate = useNavigate();
 
-        // const handleEditClick = () => {
-        //     navigate(`/userprofile/${id}/edit`);
-        // };
+        const handleEditClick = () => {
+            navigate(`/userprofile/${user.id}/edit`);
+        };
 
         // Effect to pull in user data
         useEffect(() => {
@@ -57,45 +57,73 @@ function UserProfileComponent() {
         console.log('User data updated:', user);
     }, [user]);
 
-        // const setStatus = async (selectedStatus) => {
-        //     try {
-        //         const response = await axios.put(`http://localhost:8085/v1/api/users/${id}/status`, {
-        //             status: selectedStatus
-        //         }, {
-        //             headers: {
-        //                 'Authorization': `Bearer ${getToken()}`,
-        //                 'Content-Type': 'application/json',
-        //             }
-        //         });
-        //         console.log(response.data);
-        //     } catch (error) {
-        //         console.error(`Error changing status`, error);
-        //     }
-        // };
-        //
-        // const statusChange = (event) => {
-        //     const status = event.target.value;
-        //     setStatus(status);
-        // };
+            const setStatus = async (selectedStatus) => {
+                try {
+                    const userProfile = await getUserProfile();
+                    const token = getToken().trim();
+                    console.log(`Token ${token}`);
+                    const myHeaders = {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    };
+                    console.log('Headers:', myHeaders);
+                    const requestOptions = {
+                        method: "PUT",
+                        headers: myHeaders,
+                        body: JSON.stringify({ status: selectedStatus }),
+                        redirect: "follow"
+                    };
+
+                    const response = await fetch(`http://localhost:8085/v1/api/users/${userProfile.id}/status`, requestOptions);
+                    console.log('Response Headers:', response.headers);
+                    console.log('Response Status:', response.status);
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const text = await response.text(); // Get the raw response text
+                    const result = text ? JSON.parse(text) : {}; // Parse if not empty
+                    console.log('Result:', result);
+                } catch (error) {
+                    console.error('Error changing status', error);
+                }
+            };
+
+    const statusChange = async (event) => {
+        const status = event.target.value;
+        if (status !== user.status) {
+            await setStatus(status); // Wait for the status update to complete
+            setUser((prevUser) => ({
+                ...prevUser,
+                status: status // Update the user status in the local state
+            }));
+        }
+    };
+
 
         return (
             <>
                 <div>
-                    <h1>doggy</h1>
-                    <p>Email: {user.email}</p>
-                    <p>Bio: {user.biography}</p>
-                    <p>Favourite food: {user.favFood}</p>
-                    <p>Birthday: {user.degree}</p>
-            {/*        <button onClick={handleEditClick}>Edit Profile</button>*/}
-            {/*    </div>*/}
-            {/*    <div>*/}
-            {/*        <select name="status" onChange={statusChange} style={{ padding: '10px', borderRadius: '5px',*/}
-            {/*            border: '1px solid #ccc' }}>*/}
-            {/*            <option value="">user.status</option>*/}
-            {/*            <option value="Online">Online</option>*/}
-            {/*            <option value="Do not disturb">Do not disturb</option>*/}
-            {/*            <option value="Offline">Offline</option>*/}
-            {/*        </select>*/}
+                    <h1>{user.username || "Please set your username"}</h1>
+                    <p>Email: {user.email || "Not updated by user"}</p>
+                    <p>Bio: {user.biography || "Not updated by user"}</p>
+                    <p>Favourite food: {user.favFood || "Not updated by user"}</p>
+                    <p>Birthday: {user.birthday || "Not updated by user"}</p>
+                    <p>Degree: {user.degree || "Not updated by user"}</p>
+                    <button onClick={handleEditClick}>Edit Profile</button>
+                </div>
+                <div>
+                    <select
+                        name="status"
+                        onChange={statusChange}
+                        value={user.status || ""}
+                        style={{ padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
+                    >
+                        <option value="Online">Online</option>
+                        <option value="Do not disturb">Do not disturb</option>
+                        <option value="Offline">Offline</option>
+                    </select>
                 </div>
             </>
         );

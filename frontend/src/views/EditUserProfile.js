@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getToken, getUserProfile } from "../jwt";
+
 function EditUserProfile() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null); // handling who the user is
@@ -14,27 +16,45 @@ function EditUserProfile() {
         favFood: ''
     });
 
-    //effect to pull in user data.. will probably implement smarter solution later
     useEffect(() => {
-        fetch("http://localhost:8085/v1/api/24")
-            .then(response => {
+        const fetchUser = async () => {
+            try {
+                const userProfile = await getUserProfile();
+                const token = getToken().trim();
+                const myHeaders = {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                };
+
+                const requestOptions = {
+                    method: "GET",
+                    headers: myHeaders,
+                    redirect: "follow"
+                };
+
+                const response = await fetch(`http://localhost:8085/v1/api/users/${userProfile.id}`, requestOptions);
+
                 if (!response.ok) {
-                    throw new Error('Network failure');
+                    throw new Error('Network response was not ok');
                 }
-                return response.json();
-            })
-            .then(data => {
-                setUser(data);
+
+                const result = await response.json();
+                setUser(result);
                 setLoading(false);
-            })
-            .catch(error => {
-                console.error("User may not exist!", error);
+            } catch (error) {
                 setError(error.message);
                 setLoading(false);
-            });
-    }, []);
+            }
+        };
 
-    // Handle input changes
+        fetchUser();
+    }, [navigate]);
+
+    useEffect(() => {
+        console.log('User data updated:', user);
+    }, [user]);
+
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormData({
@@ -43,24 +63,37 @@ function EditUserProfile() {
         });
     };
 
-    //Handling clicking the save button, put request and then response from console
-    const handleSave = (event) => {
+    const handleSave = async (event) => {
         event.preventDefault();
-        fetch("http://localhost:8085/users/24", {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        })
-            .then(response => response.json())
-            .then(()=> {
-                console.log('User updated:');
-                navigate('/userprofile/5'); //sends to user profile so they can see change right away
-            })
-            .catch(error => console.error('Error updating user profile', error));
+        try {
+            const userProfile = await getUserProfile();
+            const token = getToken().trim();
+            const myHeaders = {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            };
+
+            const requestOptions = {
+                method: "PUT",
+                headers: myHeaders,
+                body: JSON.stringify(formData),
+                redirect: "follow"
+            };
+
+            const response = await fetch(`http://localhost:8085/v1/api/users/${userProfile.id}`, requestOptions);
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const result = await response.json();
+            navigate(`/userprofile/${userProfile.id}`); // Navigate to the updated user profile
+        } catch (error) {
+            setError(error.message);
+        }
     };
-    //handling errors/loading of the page
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
     if (!user) return <div>No user data available</div>;
@@ -91,4 +124,5 @@ function EditUserProfile() {
         </form>
     );
 }
-export default EditUserProfile
+
+export default EditUserProfile;
