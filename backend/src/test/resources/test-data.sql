@@ -31,3 +31,15 @@ VALUES (DEFAULT, 1, 4, 1);
 -- Post from user1
 INSERT INTO post (id, author_id, content, title)
 VALUES (DEFAULT, 1, 'Hello, world!', 'First post');
+
+-- Post from user2
+INSERT INTO post (id, author_id, content, title)
+VALUES (DEFAULT, 2, 'Hello, world 2!', 'Second post');
+
+-- Post from user3
+INSERT INTO post (id, author_id, content, title)
+VALUES (DEFAULT, 3, 'Hello, world 3!', 'Third post');
+
+-- Post from user4
+INSERT INTO post (id, author_id, content, title)
+VALUES (DEFAULT, 4, 'Hello, world 4!', 'Fourth post');

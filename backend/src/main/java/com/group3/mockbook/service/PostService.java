@@ -16,4 +16,6 @@ public interface PostService {
     Void deletePost(int id, UserPrincipal userPrincipal);
 
     Iterable<Post> getAllPosts();
+
+    Iterable<Post> getFriendsPosts(UserPrincipal userPrincipal);
 }
