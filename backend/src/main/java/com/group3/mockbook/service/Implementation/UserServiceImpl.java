@@ -3,6 +3,7 @@ package com.group3.mockbook.service.Implementation;
 import java.util.List;
 import java.util.Optional;
 
+import com.group3.mockbook.exceptions.DuplicateEmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ import jakarta.persistence.EntityNotFoundException;
  * It is used by the UserController to interact with the database.
  */
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
