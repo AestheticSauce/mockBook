@@ -14,41 +14,23 @@ function Register() {
   const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = (data) => {
-    fetch(`http://localhost:8085/v1/api/users?email=${data.email}`, {
-      method: "GET",
+    fetch("http://localhost:8085/v1/api/auth/register", {
+      method: "POST",
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
     })
-        .then((response) => {
-          if (response.ok) {
-            setError("email",
-                {type: "manual", message: "An account with this email already exists. Please log in instead."}
-            );
-            return;
-          }
-
-
-          return fetch("http://localhost:8085/v1/api/users", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-          })
-              .then((response) => {
-                if (!response.ok) {
-                  setError("root.serverError", {type: response.status, message: response.statusText})
-                }
-                const user = response.json();
-                console.log("Account created successfully!", user);
-                redirect("/Login");
-              })
-              .catch((error) => {
-                console.error("Error:", error);
-                setError("submit", {type: "custom", message: error.message})
-              });
-        });
+      .then((response) => {
+        if (!response.ok) {
+          setError("root.serverError", {type: response.status, message: response.statusText})
+        }
+        redirect("/Login");
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        setError("submit", {type: "custom", message: error.message})
+      });
   };
 
   return (

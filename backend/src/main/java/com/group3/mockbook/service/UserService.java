@@ -17,7 +17,7 @@ public interface UserService {
 
     User getUserByEmailAndPassword(String email, String password);
 
-    User updateUser(User user);
+    User updateUser(int id, User userDetails);
 
     void deleteUser(int id);
 }

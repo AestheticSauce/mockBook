@@ -78,8 +78,43 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(User user) {
-        // Implementation goes here
+    public User updateUser(int id, User userDetails) {
+        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found"));
+        if (userDetails.getEmail() != null) {
+            user.setEmail(userDetails.getEmail());
+        }
+        if (userDetails.getUsername() != null) {
+            user.setUsername(userDetails.getUsername());
+        }
+        if (userDetails.getPassword() != null) {
+            user.setPassword(userDetails.getPassword());
+        }
+        if (userDetails.getSecurityQuestion() != null) {
+            user.setSecurityQuestion(userDetails.getSecurityQuestion());
+        }
+        if (userDetails.getSecurityAnswer() != null) {
+            user.setSecurityAnswer(userDetails.getSecurityAnswer());
+        }
+        if (userDetails.getBiography() != null) {
+            user.setBiography(userDetails.getBiography());
+        }
+        if (userDetails.getDegree() != null) {
+            user.setDegree(userDetails.getDegree());
+        }
+        if (userDetails.getFavFood() != null) {
+            user.setFavFood(userDetails.getFavFood());
+        }
+        if (userDetails.getBirthday() != null) {
+            user.setBirthday(userDetails.getBirthday());
+        }
+        if (userDetails.getStatus() != null) {
+            user.setStatus(userDetails.getStatus());
+        }
+        if (userDetails.getRole() != null) {
+            user.setRole(userDetails.getRole());
+        }
+
+        // Add any other fields that need to be updated
         return userRepository.save(user);
     }
 

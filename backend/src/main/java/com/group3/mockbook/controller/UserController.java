@@ -58,10 +58,9 @@ public class UserController {
     @PutMapping("/{id}/status")
     @ResponseStatus(HttpStatus.OK)
     public void updateStatus(@PathVariable int id, @RequestBody String status) {
-        User optionalUser = userService.getUserById(id);
-        User user = optionalUser;
-        user.setStatus(status);
-        userService.updateUser(user);
+        User userDetails = new User();
+        userDetails.setStatus(status);
+        userService.updateUser(id, userDetails);
     }
 
     @DeleteMapping("/{id}")
@@ -73,19 +72,7 @@ public class UserController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public User updateUser(@PathVariable int id, @RequestBody User userDetails) {
-        User optionalUser = userService.getUserById(id);
-        User user = optionalUser;
-        user.setEmail(userDetails.getEmail());
-        user.setPassword(userDetails.getPassword());
-        user.setSecurityQuestion(userDetails.getSecurityQuestion());
-        user.setSecurityAnswer(userDetails.getSecurityAnswer());
-        user.setUsername(userDetails.getUsername());
-        user.setBiography(userDetails.getBiography());
-        user.setBirthday(userDetails.getBirthday());
-        user.setDegree(userDetails.getDegree());
-        user.setFavFood(userDetails.getFavFood());
-
-        return userService.updateUser(user);
+        return userService.updateUser(id, userDetails);
     }
     
 }
