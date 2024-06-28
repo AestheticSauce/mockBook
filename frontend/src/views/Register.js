@@ -14,7 +14,7 @@ function Register() {
   const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = (data) => {
-    fetch(`http://localhost:8085/v1/api/users/email=${data.email}`, {
+    fetch(`http://localhost:8085/v1/api/users?email=${data.email}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json"
