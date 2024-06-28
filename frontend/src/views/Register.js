@@ -114,6 +114,11 @@ function Register() {
 
         <button type="submit">Submit</button>
         {errors.submit && <p>{errors.submit.message}</p>}
+
+        <p></p>
+        <button type="button" onClick={() => window.location.href = "/Login"}>
+          Login
+        </button>
       </form>
     </div>
   );

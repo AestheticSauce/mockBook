@@ -1,0 +1,128 @@
+package com.group3.mockbook.IntegrationTests;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.group3.mockbook.dto.Authorization.LoginRequestDto;
+import com.group3.mockbook.dto.Authorization.LoginResponseDto;
+import com.group3.mockbook.dto.Authorization.PasswordResetDto;
+import com.group3.mockbook.dto.Authorization.RegistrationRequestDto;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+@Sql({ "/test-data.sql" })
+@ActiveProfiles("test")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
+@ContextConfiguration
+@AutoConfigureMockMvc
+public class AuthenticationIntegrationTest {
+
+    @Autowired
+    private MockMvc api;
+
+    @LocalServerPort
+    private int port;
+
+    @Test
+    public void testLoginValid() throws Exception {
+        LoginRequestDto loginRequest = new LoginRequestDto("user1@example.com", "password1");
+
+        MvcResult loginResult = api.perform(
+                post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(loginRequest)))
+                .andExpect(status().isOk())
+                .andReturn();
+        LoginResponseDto loginResponse = new ObjectMapper()
+                .readValue(loginResult.getResponse().getContentAsString(), LoginResponseDto.class);
+        assertNotNull(loginResponse.getToken());
+    }
+
+    @Test
+    public void testLoginInvalidUser() throws Exception {
+        LoginRequestDto loginRequest = new LoginRequestDto("IdontExist@example.com", "password1");
+
+        api.perform(
+                post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(loginRequest)))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void testLoginInvalidPassword() throws Exception {
+        LoginRequestDto loginRequest = new LoginRequestDto("user1@example.com", "notmypassword");
+
+        api.perform(
+                post("/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(loginRequest)))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void testRegisterValidUser() throws Exception {
+        RegistrationRequestDto registrationRequest = new RegistrationRequestDto();
+        registrationRequest.setEmail("newuser@example.com");
+        registrationRequest.setPassword("password");
+        registrationRequest.setUsername("newuser");
+        registrationRequest.setSecurityQuestion("What is your favorite color?");
+        registrationRequest.setSecurityAnswer("Blue");
+
+        api.perform(post("/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(registrationRequest)))
+                .andExpect(status().isCreated());
+
+    }
+
+    @Test
+    public void testPasswordResetValid() throws Exception {
+        PasswordResetDto resetDto = new PasswordResetDto("user1@example.com", "Fluffy",
+                "newPassword");
+
+        api.perform(put("/auth/password-reset")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(resetDto)))
+                .andExpect(status().isNoContent());
+
+        // Optional: Verify the password was actually changed by attempting to log in
+        // with the new password.
+    }
+
+    @Test
+    public void testPasswordResetInvalidEmail() throws Exception {
+        PasswordResetDto resetDto = new PasswordResetDto("invalidemail@example.com", "Fluffy", "newPassword");
+
+        api.perform(put("/auth/password-reset")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(resetDto)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testPasswordResetIncorrectSecurityAnswer() throws Exception {
+        PasswordResetDto resetDto = new PasswordResetDto("user1@example.com", "WrongAnswer", "newPassword");
+
+        api.perform(put("/auth/password-reset")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(resetDto)))
+                .andExpect(status().isUnauthorized());
+    }
+}

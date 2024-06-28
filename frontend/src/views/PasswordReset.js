@@ -11,18 +11,20 @@ function PasswordReset() {
     const [step, setStep] = useState(1);
 
     const handleSecurityQuestionSubmit = (data) => {
-        // Mock API call to validate security question answer
-        fetch("http://localhost:8085/v1/api/validate-security-question", {
-            method: "POST",
+        fetch(`http://localhost:8085/v1/api/auth/security-question?email=${data.email}`, {
+            method: "GET",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: data.email, securityAnswer: data.securityAnswer }),
         })
         .then((response) => {
             if (!response.ok) {
                 setError("securityAnswer", { type: "manual", message: "Incorrect answer" });
             } else {
-                setEmail(data.email);
+                response.json().then((responseData) => {
+                setSecurityQuestion(responseData.securityQuestion);
+                setEmail(responseData.email);
                 setStep(2); // Proceed to next step
+            });
+                
             }
         })
         .catch((error) => {
@@ -32,10 +34,10 @@ function PasswordReset() {
     };
 
     const handlePasswordResetSubmit = (data) => {
-        fetch("http://localhost:8085/v1/api/reset-password", {
-            method: "POST",
+        fetch("http://localhost:8085/v1/api/auth/password-reset", {
+            method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, newPassword: data.newPassword }),
+            body: JSON.stringify({ email: data.email, newPassword: data.newPassword, securityAnswer: data.securityAnswer}),
         })
         .then((response) => {
             if (!response.ok) {
@@ -58,17 +60,20 @@ function PasswordReset() {
                     <label htmlFor="email">Email</label>
                     <input id="email" {...register("email", { required: "Required" })} />
                     {errors.email && <p>{errors.email.message}</p>}
-                    
-                    <label htmlFor="securityAnswer">Security Answer</label>
-                    <input id="securityAnswer" {...register("securityAnswer", { required: "Required" })} />
-                    {errors.securityAnswer && <p>{errors.securityAnswer.message}</p>}
-                    
                     <button type="submit">Submit</button>
                 </form>
             )}
             {step === 2 && (
                 <form onSubmit={handleSubmit(handlePasswordResetSubmit)}>
                     <h2>Set New Password</h2>
+
+                    <label htmlFor="securityQuestion">Security Question</label>
+                    <input id="securityQuestion" value={securityQuestion} disabled />
+
+                    <label htmlFor="securityAnswer">Security Answer</label>
+                    <input id="securityAnswer" {...register("securityAnswer", { required: "Required" })} />
+                    {errors.securityAnswer && <p>{errors.securityAnswer.message}</p>}
+
                     <label htmlFor="newPassword">New Password</label>
                     <input
                         id="newPassword"
@@ -88,6 +93,7 @@ function PasswordReset() {
                     {errors.newPassword && <p>{errors.newPassword.message}</p>}
                     
                     <button type="submit">Reset Password</button>
+                    {errors.submit && <p>{errors.submit.message}</p>}
                 </form>
             )}
         </div>
