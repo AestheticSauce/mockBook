@@ -11,7 +11,11 @@ function UserProfileComponent() {
         const navigate = useNavigate();
 
         const handleEditClick = () => {
-            navigate(`/userprofile/${user.id}/edit`);
+            const handleEditClick = async () => {
+                const userProfile = await getUserProfile();
+                navigate(`/userprofile/${userProfile.id}/edit`);
+            };
+            handleEditClick();
         };
 
         // Effect to pull in user data
@@ -33,7 +37,7 @@ function UserProfileComponent() {
                         redirect: "follow"
                     };
 
-                    const response = await fetch(`http://localhost:8085/v1/api/users/${userProfile.id}`, requestOptions)
+                    const response = await fetch(`http://localhost:8085/v1/api/users/${this.props.match.params.id}`, requestOptions)
                     console.log('Response Headers:', response.headers);
                     console.log('Response Status:', response.status);
 

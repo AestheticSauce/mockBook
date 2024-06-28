@@ -31,10 +31,6 @@ function App() {
             element: <PasswordReset/>
         },
         {
-            path: '/UserProfile',
-            element: <Navigate to="/userprofile/25" /> //using navigate for hardcoded example, until login is finished
-        },
-        {
             path: '/userprofile/:id',
             element: <UserProfile />
         },

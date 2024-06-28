@@ -18,7 +18,7 @@ function Friend({ id, username, onClick }) {
     return (
         <div className="friend">
             <div className="friend-info">
-                <div>{username}</div>
+                <div><a href={`/userprofile/${id}`}>{username}</a></div>
                 <button onClick={() => { onClick(); deleteFriend(); }}>Delete</button>
             </div>
         </div>
