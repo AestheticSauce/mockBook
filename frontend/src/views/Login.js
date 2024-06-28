@@ -74,6 +74,12 @@ function Login(){
                 <button type="submit">Submit</button>
 
                 <p></p>
+                <small>Forgot password?</small>
+                <button type="button" onClick={() => window.location.href = "/password-reset"}>
+                    Reset Password
+                </button>
+                <br/>
+                <small>New user?</small>
                 <button type="button" onClick={() => window.location.href = "/Register"}>
                     Register
                 </button>

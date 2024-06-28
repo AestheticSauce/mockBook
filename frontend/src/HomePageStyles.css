@@ -1,0 +1,56 @@
+.homepage-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.main-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.posts-panel {
+    flex: 3;
+    margin-right: 20px;
+}
+
+.friends-panel {
+    flex: 1;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 250px;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.posts-panel ul, .friends-panel ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.posts-panel li, .friends-panel li {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #030303;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.posts-panel li h3, .friends-panel li h3 {
+    margin: 0 0 5px 0;
+}
+
+.posts-panel li small, .friends-panel li small {
+    display: block;
+}
