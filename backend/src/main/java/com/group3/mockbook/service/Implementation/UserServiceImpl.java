@@ -81,37 +81,37 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(int id, User userDetails) {
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found"));
-        if (userDetails.getEmail() != null) {
+        if (!userDetails.getEmail().isEmpty()) {
             user.setEmail(userDetails.getEmail());
         }
-        if (userDetails.getUsername() != null) {
+        if (userDetails.getUsername() != null && !userDetails.getUsername().isEmpty()) {
             user.setUsername(userDetails.getUsername());
         }
-        if (userDetails.getPassword() != null) {
+        if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
             user.setPassword(userDetails.getPassword());
         }
-        if (userDetails.getSecurityQuestion() != null) {
+        if (userDetails.getSecurityQuestion() != null && !userDetails.getSecurityQuestion().isEmpty()) {
             user.setSecurityQuestion(userDetails.getSecurityQuestion());
         }
-        if (userDetails.getSecurityAnswer() != null) {
+        if (userDetails.getSecurityAnswer() != null && !userDetails.getSecurityAnswer().isEmpty()) {
             user.setSecurityAnswer(userDetails.getSecurityAnswer());
         }
-        if (userDetails.getBiography() != null) {
+        if (userDetails.getBiography() != null && !userDetails.getBiography().isEmpty()) {
             user.setBiography(userDetails.getBiography());
         }
-        if (userDetails.getDegree() != null) {
+        if (userDetails.getDegree() != null && !userDetails.getDegree().isEmpty()) {
             user.setDegree(userDetails.getDegree());
         }
-        if (userDetails.getFavFood() != null) {
+        if (userDetails.getFavFood() != null && !userDetails.getFavFood().isEmpty()) {
             user.setFavFood(userDetails.getFavFood());
         }
-        if (userDetails.getBirthday() != null) {
+        if (userDetails.getBirthday() != null && !userDetails.getBirthday().isEmpty()) {
             user.setBirthday(userDetails.getBirthday());
         }
-        if (userDetails.getStatus() != null) {
+        if (userDetails.getStatus() != null && !userDetails.getStatus().isEmpty()) {
             user.setStatus(userDetails.getStatus());
         }
-        if (userDetails.getRole() != null) {
+        if (userDetails.getRole() != null && !userDetails.getRole().isEmpty()) {
             user.setRole(userDetails.getRole());
         }
 
