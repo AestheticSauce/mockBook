@@ -3,11 +3,10 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import FriendList from './components/friendList';
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <FriendList></FriendList>
+    <App></App>
   </React.StrictMode>
 );
 

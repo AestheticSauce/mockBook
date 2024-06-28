@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {resolvePath, useNavigate} from 'react-router-dom';
 import {getToken, getUserProfile} from "../jwt"; // Assuming you use react-router-dom
-
+import FriendList from '../components/friendList';
+import GetFriendRequest from '../components/getfriendRequest';
+import GetUsers from '../components/getUsers';
 function UserProfileComponent() {
         const [user, setUser] = useState({});
         const [loading, setLoading] = useState(true);
@@ -125,6 +127,9 @@ function UserProfileComponent() {
                         <option value="Offline">Offline</option>
                     </select>
                 </div>
+                <FriendList></FriendList>
+                <GetFriendRequest></GetFriendRequest>
+                <GetUsers></GetUsers>
             </>
         );
 }
