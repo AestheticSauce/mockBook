@@ -1,8 +1,9 @@
 package com.group3.mockbook.controller;
 
+import com.group3.mockbook.exceptions.UserNotFoundByEmailException;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.group3.mockbook.exceptions.UserNotFoundException;
+import com.group3.mockbook.exceptions.UserNotFoundByIdException;
 import com.group3.mockbook.model.User;
 import com.group3.mockbook.service.UserService;
 
@@ -38,12 +39,23 @@ public class UserController {
     public User getUser(@PathVariable int id) {
         User user = userService.getUserById(id);
         if (user == null) {
-            throw new UserNotFoundException(id);
+            throw new UserNotFoundByIdException(id);
         } else {
             return user;
         }
     }
-    
+
+    @GetMapping("/email={email}")
+    @ResponseStatus(HttpStatus.OK)
+    public User getUserByEmail(@PathVariable String email) {
+        User user = userService.getUserByEmail(email);
+        if (user == null) {
+            throw new UserNotFoundByEmailException(email);
+        } else {
+            return user;
+        }
+    }
+
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
     public List<User> getAllUsers() {
