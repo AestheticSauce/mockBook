@@ -80,6 +80,10 @@ public class UserController {
             throw new UserNotFoundException(id);
         }
         User user = optionalUser.get();
+        user.setEmail(userDetails.getEmail());
+        user.setPassword(userDetails.getPassword());
+        user.setSecurity_question(userDetails.getSecurity_question());
+        user.setSecurity_answer(userDetails.getSecurity_answer());
         user.setUsername(userDetails.getUsername());
         user.setBiography(userDetails.getBiography());
         user.setBirthday(userDetails.getBirthday());

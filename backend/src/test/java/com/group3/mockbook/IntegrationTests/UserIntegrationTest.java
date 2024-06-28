@@ -110,7 +110,7 @@ public class UserIntegrationTest {
         String updatedUserJson = new ObjectMapper().writeValueAsString(updatedUser);
 
         // Update the user
-        MvcResult result = api.perform(put("/users")
+        MvcResult result = api.perform(put("/users/2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(updatedUserJson))
                 .andExpect(status().isOk())
