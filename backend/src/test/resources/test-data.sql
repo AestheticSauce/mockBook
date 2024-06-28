@@ -13,15 +13,15 @@ INSERT INTO users (id, username, email, password, security_question, security_an
 VALUES (DEFAULT, 'user4', 'user4@example.com', '$2a$12$Z8voFdWoDNeRpRVQvP4EvuRVrM7bIBqSIT3N9b/pdma3j3oUwKQSW', 'Question?', 'Another one', 1, 'USER');
 
 -- Friend request from user1 to user2
-INSERT INTO friendship (id, source_user_id, target_user_id, status)
+INSERT INTO friend_request (id, source_id, target_id, status)
 VALUES (DEFAULT, 1, 2, 0);
 
 -- Friend request from user2 to user3
-INSERT INTO friendship (id, source_user_id, target_user_id, status)
+INSERT INTO friend_request (id, source_id, target_id, status)
 VALUES (DEFAULT, 2, 3, 0);
 
 -- Friend request from user3 to user1, already accepted for testing accept/reject functionality
-INSERT INTO friendship (id, source_user_id, target_user_id, status)
+INSERT INTO friend_request (id, source_id, target_id, status)
 VALUES (DEFAULT, 3, 1, 1);
 
 -- Friend request from user1 to user4, already accepted for testing bi-directional relation retrieval

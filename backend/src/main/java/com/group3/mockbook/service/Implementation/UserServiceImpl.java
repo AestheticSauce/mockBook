@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.group3.mockbook.exceptions.DuplicateEmailException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import com.group3.mockbook.model.User;
