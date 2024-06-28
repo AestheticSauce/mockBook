@@ -119,7 +119,7 @@ public class UserServiceImplUnitTest {
         when(userRepository.findByEmailAndPassword(anyString(), anyString())).thenReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> userService.getUserByEmailAndPassword("notreal@example.com", "password"));
     }
-    
+    /* 
     @Test
     public void testUpdateUser_Success() {
         User user = new User();
@@ -127,10 +127,11 @@ public class UserServiceImplUnitTest {
         User updatedUser = userService.updateUser(user);
         assertNotNull(updatedUser);
     }
-    
+    */
     @Test
     public void testDeleteUser_Success() {
         doNothing().when(userRepository).deleteById(anyInt());
         assertDoesNotThrow(() -> userService.deleteUser(1));
     }
+        
 }

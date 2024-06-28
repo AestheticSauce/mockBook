@@ -2,6 +2,7 @@ package com.group3.mockbook.service.Implementation;
 
 import com.group3.mockbook.model.Friendship;
 import com.group3.mockbook.model.User;
+import com.group3.mockbook.model.Friendship.RequestStatus;
 import com.group3.mockbook.repository.FriendshipRepository;
 import com.group3.mockbook.service.FriendshipService;
 import com.group3.mockbook.service.UserService;
@@ -11,6 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -97,9 +99,12 @@ public class FriendshipServiceImpl implements FriendshipService {
     public List<Friendship> getFriendships(Integer userId) {
         User user = userService.getUserById(userId);
 
+        List<Friendship> friendships = new ArrayList<>();
+
         // Find all friendships for userId
-        List<Friendship> friendships = friendshipRepository.findBySourceUserAndStatus(user, Friendship.RequestStatus.ACCEPTED);
-        friendships.addAll(friendshipRepository.findByTargetUserAndStatus(user,Friendship.RequestStatus.ACCEPTED));
+        friendships.addAll(friendshipRepository.findBySourceUserAndStatus(user, Friendship.RequestStatus.ACCEPTED));
+        friendships.addAll(friendshipRepository.findByTargetUserAndStatus(user, Friendship.RequestStatus.ACCEPTED));
+        
         return friendships;
     }
 }

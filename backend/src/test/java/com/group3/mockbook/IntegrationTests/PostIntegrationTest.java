@@ -1,10 +1,13 @@
 package com.group3.mockbook.IntegrationTests;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group3.mockbook.dto.Authorization.RegistrationRequestDto;
 import com.group3.mockbook.dto.Authorization.PasswordResetDto;
 import com.group3.mockbook.dto.Post.CreatePostDto;
 import com.group3.mockbook.dto.Post.UpdatePostDto;
+import com.group3.mockbook.model.Post;
+import com.group3.mockbook.model.User;
 import com.group3.mockbook.utilities.WithMockUser;
 import com.group3.mockbook.dto.Authorization.LoginRequestDto;
 import com.group3.mockbook.dto.Authorization.LoginResponseDto;
@@ -21,9 +24,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.util.List;
 
 
 @Sql({ "/test-data.sql" })
@@ -108,5 +115,19 @@ public class PostIntegrationTest {
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].title").exists())
                 .andExpect(jsonPath("$[0].content").exists());
+    }
+
+    @Test
+    @WithMockUser
+    public void shouldGetFriendsPostsSuccessfully() throws Exception {
+        MvcResult resp = this.api.perform(get("/posts/friends-posts"))
+            .andExpect(status().isOk())
+            .andReturn();
+        
+        String json = resp.getResponse().getContentAsString();
+        List<Post> posts = new ObjectMapper().readValue(json, new TypeReference<List<Post>>() {
+        });
+        assertEquals(2, posts.size());
+        
     }
 }

@@ -72,11 +72,8 @@ export async function getUserProfile() {
         const token = getToken();
         if (token) {
             const payload = await verifyJwt(token);
-            if (payload) {
-                console.log('Payload:', payload); // Debug log to inspect payload
-                const userProfile = transformPayload(payload);
-                return userProfile;
-            }
+
+            if (payload) return transformPayload(payload);
         }
         console.error('No valid token found or payload is null');
         return null;

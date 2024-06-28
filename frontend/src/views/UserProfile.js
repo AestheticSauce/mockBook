@@ -130,6 +130,10 @@ function UserProfileComponent() {
                 <FriendList></FriendList>
                 <GetFriendRequest></GetFriendRequest>
                 <GetUsers></GetUsers>
+                <p></p>
+                <button type="button" onClick={() => window.location.href = "/homepage"}>
+                    Home Page
+                </button>
             </>
         );
 }

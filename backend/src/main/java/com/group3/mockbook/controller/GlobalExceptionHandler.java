@@ -1,5 +1,7 @@
 package com.group3.mockbook.controller;
 
+import com.group3.mockbook.exceptions.DuplicateEmailException;
+import com.group3.mockbook.exceptions.UserNotFoundByEmailException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 

@@ -52,7 +52,7 @@ public class UserIntegrationTest {
                 String json = resp.getResponse().getContentAsString();
                 List<User> users = new ObjectMapper().readValue(json, new TypeReference<List<User>>() {
                 });
-                assertEquals(3, users.size());
+                assertEquals(4, users.size());
         }
 
         @Test

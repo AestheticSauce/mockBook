@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.group3.mockbook.dto.Authorization.LoginResponseDto;
 import com.group3.mockbook.dto.Authorization.PasswordResetDto;
 import com.group3.mockbook.dto.Authorization.RegistrationRequestDto;
+import com.group3.mockbook.dto.Authorization.SecurityQuestionDto;
 import com.group3.mockbook.model.User;
 import com.group3.mockbook.security.JwtIssuer;
 import com.group3.mockbook.security.UserPrincipal;
@@ -21,9 +22,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.http.HttpStatus;
 
 @RestController
@@ -48,5 +51,11 @@ public class AuthenticationController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void putPasswordReset(@RequestBody PasswordResetDto resetDto) {
         authenticationService.resetPassword(resetDto.getEmail(), resetDto.getSecurityAnswer(), resetDto.getNewPassword());
+    }
+
+    @GetMapping("/security-question")
+    @ResponseStatus(HttpStatus.OK)
+    public SecurityQuestionDto putSecurityQuestion(@RequestParam String email) {
+        return authenticationService.getSecurityQuestion(email);
     }
 }

@@ -40,6 +40,8 @@ public class FriendshipServiceImplUnitTest {
 
     private Friendship acceptedFriendship;
 
+    private Friendship acceptedFriendship2;
+
     private Friendship pendingFriendship;
 
     private User user1;
@@ -47,6 +49,8 @@ public class FriendshipServiceImplUnitTest {
     private User user2;
 
     private User user3;
+
+    private User user4;
 
     @BeforeEach
     void setup() {
@@ -56,11 +60,19 @@ public class FriendshipServiceImplUnitTest {
         user2.setId(2);
         user3 = new User("test3@example.com", "test3", "pass3", "q", "a");
         user3.setId(3);
+        user4 = new User("test4@example.com", "test4", "pass4", "q", "a");
+        user4.setId(4);
 
         acceptedFriendship = new Friendship();
         acceptedFriendship.setId(1);
         acceptedFriendship.setSourceUser(user1);
         acceptedFriendship.setTargetUser(user2);
+        acceptedFriendship.setStatus(Friendship.RequestStatus.ACCEPTED);
+
+        acceptedFriendship2 = new Friendship();
+        acceptedFriendship.setId(2);
+        acceptedFriendship.setSourceUser(user3);
+        acceptedFriendship.setTargetUser(user1);
         acceptedFriendship.setStatus(Friendship.RequestStatus.ACCEPTED);
 
         pendingFriendship = new Friendship();
@@ -158,8 +170,9 @@ public class FriendshipServiceImplUnitTest {
     void testGetFriendships_Success() {
         when(userService.getUserById(1)).thenReturn(user1);
         when(friendshipRepository.findBySourceUserAndStatus(user1, Friendship.RequestStatus.ACCEPTED)).thenReturn(List.of(acceptedFriendship));
+        when(friendshipRepository.findByTargetUserAndStatus(user1, Friendship.RequestStatus.ACCEPTED)).thenReturn(List.of(acceptedFriendship2));
         List<Friendship> result = friendshipService.getFriendships(user1.getId());
-        assertEquals(acceptedFriendship, result.get(0));
+        assertEquals(List.of(acceptedFriendship, acceptedFriendship2), result);
     }
 
     @Test
