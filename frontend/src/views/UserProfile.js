@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {resolvePath, useNavigate} from 'react-router-dom';
+import {resolvePath, useNavigate, useLocation} from 'react-router-dom';
 import {getToken, getUserProfile} from "../jwt"; // Assuming you use react-router-dom
 import FriendList from '../components/friendList';
 import GetFriendRequest from '../components/getfriendRequest';
@@ -17,6 +17,10 @@ function UserProfileComponent() {
             };
             handleEditClick();
         };
+
+        // get the path variable from the URL
+        console.log('Path:', useLocation().pathname.split('/').at(-1));
+        const id = useLocation().pathname.split('/').at(-1);
 
         // Effect to pull in user data
         useEffect(() => {
@@ -37,7 +41,9 @@ function UserProfileComponent() {
                         redirect: "follow"
                     };
 
-                    const response = await fetch(`http://localhost:8085/v1/api/users/${this.props.match.params.id}`, requestOptions)
+                    
+
+                    const response = await fetch(`http://localhost:8085/v1/api/users/${id}`, requestOptions)
                     console.log('Response Headers:', response.headers);
                     console.log('Response Status:', response.status);
 

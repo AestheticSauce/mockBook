@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(int id, User userDetails) {
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User with id " + id + " not found"));
-        if (userDetails.getUsername() != null && !userDetails.getEmail().isEmpty()) {
+        if (userDetails.getEmail() != null && !userDetails.getEmail().isEmpty()) {
             user.setEmail(userDetails.getEmail());
         }
         if (userDetails.getUsername() != null && !userDetails.getUsername().isEmpty()) {
@@ -116,7 +116,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // Add any other fields that need to be updated
-        return userRepository.save(user);
+        return userRepository.saveAndFlush(user);
     }
 
     @Override
