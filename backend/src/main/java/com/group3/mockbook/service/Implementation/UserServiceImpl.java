@@ -4,16 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
-import com.group3.mockbook.dto.User.UserDTO;
 import com.group3.mockbook.model.User;
 import com.group3.mockbook.repository.UserRepository;
-import com.group3.mockbook.service.PostService;
 import com.group3.mockbook.service.UserService;
-
-import jakarta.persistence.EntityNotFoundException;
 
 /**
  * UserServiceImpl is a class that implements the UserService interface.
@@ -28,7 +23,9 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User saveUser(User user) {
-        // Implementation goes here
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
         return userRepository.save(user);
     }
 
@@ -71,20 +68,5 @@ public class UserServiceImpl implements UserService{
     public void deleteUser(int id) {
         // Implementation goes here
         userRepository.deleteById(id);
-    }
-
-    @Override
-    public void resetPassword(String email, String securityAnswer, String newPassword) {
-        // Implementation goes here
-        Optional<User> user = userRepository.findByEmail(email);
-        if(user.isPresent()) {
-            if(!user.get().getSecurityAnswer().equals(securityAnswer)) {
-                throw new BadCredentialsException("Invalid security answer");
-            }
-            user.get().setPassword(newPassword);
-            userRepository.save(user.get());
-        } else{
-            throw new EntityNotFoundException(email);
-        }
     }
 }
