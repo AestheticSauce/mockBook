@@ -10,7 +10,7 @@ public interface FriendshipService {
     Friendship acceptFriendshipRequest(Integer id);
     Friendship rejectFriendshipRequest(Integer id);
     void deleteFriendship(Integer id);
-    Optional<Friendship> getFriendshipDetails(Integer id);
+    Friendship getFriendshipDetails(Integer id);
     List<Friendship> getFriendshipRequests(Integer userId);
     List<Friendship> getFriendships(Integer userId);
 }

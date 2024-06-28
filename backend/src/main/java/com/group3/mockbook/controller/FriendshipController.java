@@ -65,7 +65,7 @@ public class FriendshipController {
     
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Friendship> getFriendship(@PathVariable Integer id) {
-        return ResponseEntity.of(friendRequestService.getFriendshipDetails(id));
+    public Friendship getFriendship(@PathVariable Integer id) {
+        return friendRequestService.getFriendshipDetails(id);
     }
 }

@@ -67,9 +67,14 @@ public class FriendshipServiceImpl implements FriendshipService {
     }
     
     @Override
-    public Optional<Friendship> getFriendshipDetails(Integer id) {
+    public Friendship getFriendshipDetails(Integer id) {
         // Implement logic to get a specific friendship detail
-        return friendshipRepository.findById(id);
+        Optional<Friendship> friend = friendshipRepository.findById(id);
+        if (friend.isPresent()) {
+            return friend.get();
+        } else {
+            return null;
+        }
     }
 
     @Override
