@@ -90,7 +90,7 @@ const HomePage = () => {
         <div className="container">
             <div className="header">
                 <h1>Welcome, {user ? user.email : "Loading..."}</h1>
-                <button type="button" onClick={() => window.location.href = "/UserProfile"}>
+                <button type="button" onClick={() => window.location.href = `/userprofile/${user.id}`}>
                     My Profile
                 </button>
             </div>
