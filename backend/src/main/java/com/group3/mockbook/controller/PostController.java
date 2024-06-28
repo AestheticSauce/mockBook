@@ -56,5 +56,4 @@ public class PostController {
     public Iterable<Post> getFriendsPosts(@CurrentSecurityContext(expression="authentication.principal") UserPrincipal userPrincipal) {
         return postService.getFriendsPosts(userPrincipal);
     }
-    
 }

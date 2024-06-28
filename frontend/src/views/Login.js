@@ -34,7 +34,7 @@ function Login(){
             jwtUtil.setToken(data.token);
             const user = await jwtUtil.getUserProfile();
             if (user) {
-                navigate(`/userprofile/${user.sub}`); // Redirect to user profile page
+                navigate(`/homepage`); // Redirect to home page
             } else {
                 setError("Failed to decode token. Please try again.");
             }
