@@ -8,6 +8,7 @@ import Login from "./views/Login";
 import PasswordReset from "./views/PasswordReset";
 import UserProfile from "./views/UserProfile";
 import EditUserProfile from './views/EditUserProfile';
+import HomePage from "./views/HomePage";
 function App() {
     
     const [user, setUser] = useState(null);
@@ -40,6 +41,10 @@ function App() {
         {
             path: '/userprofile/:id/edit', //needs to check login status in the future, so only user can edit user
             element: <EditUserProfile />
+        },
+        {
+            path: '/homepage',
+            element: <HomePage />
         }
     ])
 
