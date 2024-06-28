@@ -41,7 +41,7 @@ public class SecurityConfig {
 			.cors((cors) -> cors.disable())
 			.formLogin((formLogin) -> formLogin.disable())
 			.authorizeHttpRequests((registry) -> registry
-				.requestMatchers("/auth/login", "/auth/register", "/auth/password-reset")
+				.requestMatchers("/auth/login", "/auth/register", "/auth/password-reset", "/auth/security-question")
 				.permitAll()
 				.anyRequest().authenticated()
 				)

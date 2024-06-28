@@ -15,6 +15,7 @@ import org.springframework.web.client.HttpClientErrorException.Unauthorized;
 
 import com.group3.mockbook.dto.Authorization.LoginResponseDto;
 import com.group3.mockbook.dto.Authorization.RegistrationRequestDto;
+import com.group3.mockbook.dto.Authorization.SecurityQuestionDto;
 import com.group3.mockbook.model.User;
 import com.group3.mockbook.security.JwtIssuer;
 import com.group3.mockbook.security.UserPrincipal;
@@ -76,6 +77,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         } else{
             throw new BadCredentialsException("Security answer is incorrect");
         }
+    }
+
+    @Override
+    public SecurityQuestionDto getSecurityQuestion(String email) {
+        User user = userService.getUserByEmail(email);
+        return new SecurityQuestionDto(user.getEmail(), user.getSecurityQuestion());
     }
     
 }
