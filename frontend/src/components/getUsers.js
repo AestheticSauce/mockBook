@@ -61,7 +61,7 @@ function GetUsers() {
         <>
             <link rel="stylesheet" href="https://matcha.mizu.sh/matcha.css"></link>
             <div>
-                <button onClick={() => setShow(!show)}>Friend Requests</button>
+                <button onClick={() => setShow(!show)}>Get Users</button>
                 {show ? currUsers : null}
             </div>
         </>
