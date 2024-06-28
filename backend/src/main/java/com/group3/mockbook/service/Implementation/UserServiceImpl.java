@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
+import com.group3.mockbook.dto.User.UserDTO;
 import com.group3.mockbook.exceptions.EntityNotFoundException;
 import com.group3.mockbook.model.User;
 import com.group3.mockbook.repository.UserRepository;
@@ -77,7 +78,7 @@ public class UserServiceImpl implements UserService{
         // Implementation goes here
         Optional<User> user = userRepository.findByEmail(email);
         if(user.isPresent()) {
-            if(!user.get().getSecurity_answer().equals(securityAnswer)) {
+            if(!user.get().getSecurityAnswer().equals(securityAnswer)) {
                 throw new BadCredentialsException("Invalid security answer");
             }
             user.get().setPassword(newPassword);

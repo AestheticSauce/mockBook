@@ -1,7 +1,7 @@
 package com.group3.mockbook.controller;
 
-import com.group3.mockbook.dto.CreatePostDto;
-import com.group3.mockbook.dto.UpdatePostDto;
+import com.group3.mockbook.dto.Post.CreatePostDto;
+import com.group3.mockbook.dto.Post.UpdatePostDto;
 import com.group3.mockbook.model.Post;
 import com.group3.mockbook.security.UserPrincipal;
 import com.group3.mockbook.service.PostService;

@@ -1,7 +1,7 @@
 package com.group3.mockbook.IntegrationTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.group3.mockbook.dto.FriendRequestDto;
+import com.group3.mockbook.dto.Friendship.FriendRequestDto;
 import com.group3.mockbook.model.FriendRequest;
 import com.group3.mockbook.utilities.WithMockUser;
 

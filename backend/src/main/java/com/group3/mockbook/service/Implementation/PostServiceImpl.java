@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.group3.mockbook.dto.CreatePostDto;
-import com.group3.mockbook.dto.UpdatePostDto;
+import com.group3.mockbook.dto.Post.CreatePostDto;
+import com.group3.mockbook.dto.Post.UpdatePostDto;
 import com.group3.mockbook.exceptions.EntityNotFoundException;
 import com.group3.mockbook.model.Post;
 import com.group3.mockbook.repository.PostRepository;

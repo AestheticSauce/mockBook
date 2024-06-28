@@ -37,6 +37,7 @@ public class SecurityConfig {
         http.sessionManagement(
 				(sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.csrf((csrf)->csrf.disable())
+			.cors((cors) -> cors.disable())
 			.formLogin((formLogin) -> formLogin.disable())
 			.authorizeHttpRequests((registry) -> registry
 				.requestMatchers("/auth/login", "/auth/register", "/auth/password-reset")

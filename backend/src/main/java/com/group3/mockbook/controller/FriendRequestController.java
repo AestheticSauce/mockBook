@@ -2,7 +2,7 @@ package com.group3.mockbook.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.group3.mockbook.dto.FriendRequestDto;
+import com.group3.mockbook.dto.Friendship.FriendRequestDto;
 import com.group3.mockbook.exceptions.EntityNotFoundException;
 import com.group3.mockbook.model.FriendRequest;
 import com.group3.mockbook.model.User;

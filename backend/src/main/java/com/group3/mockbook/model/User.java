@@ -1,11 +1,16 @@
 package com.group3.mockbook.model;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.List;
 import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -26,17 +31,24 @@ public class User {
 
     private String email;
 
+    @JsonIgnore
     private String password;
 
     @CreationTimestamp
-    private Timestamp created_at;
+    private Timestamp createdAt;
 
     @UpdateTimestamp
-    private Timestamp updated_at;
+    private Timestamp updatedAt;
 
-    private String security_question;
+    @OneToMany(mappedBy = "sourceUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Friendship> sourceFriendships = new HashSet<>();
 
-    private String security_answer;
+    @OneToMany(mappedBy = "targetUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Friendship> targetFriendships = new HashSet<>();
+
+    private String securityQuestion;
+
+    private String securityAnswer;
 
     private boolean enabled;
 
@@ -83,36 +95,36 @@ public class User {
         this.password = password;
     }
 
-    public Timestamp getCreated_at() {
-        return created_at;
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(Timestamp created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(Timestamp created_at) {
+        this.createdAt = created_at;
     }
 
-    public Timestamp getUpdated_at() {
-        return updated_at;
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdated_at(Timestamp updated_at) {
-        this.updated_at = updated_at;
+    public void setUpdatedAt(Timestamp updated_at) {
+        this.updatedAt = updated_at;
     }
 
-    public String getSecurity_question() {
-        return security_question;
+    public String getSecurityQuestion() {
+        return securityQuestion;
     }
 
-    public void setSecurity_question(String security_question) {
-        this.security_question = security_question;
+    public void setSecurityQuestion(String security_question) {
+        this.securityQuestion = security_question;
     }
 
-    public String getSecurity_answer() {
-        return security_answer;
+    public String getSecurityAnswer() {
+        return securityAnswer;
     }
 
-    public void setSecurity_answer(String security_answer) {
-        this.security_answer = security_answer;
+    public void setSecurityAnswer(String security_answer) {
+        this.securityAnswer = security_answer;
     }
 
     public String getRole() {
@@ -130,8 +142,8 @@ public class User {
         this.email = email;
         this.username = username;
         this.password = password;
-        this.security_question = security_question;
-        this.security_answer = security_answer;
+        this.securityQuestion = security_question;
+        this.securityAnswer = security_answer;
     }
 
 }

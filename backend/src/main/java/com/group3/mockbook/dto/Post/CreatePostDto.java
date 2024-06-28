@@ -1,4 +1,4 @@
-package com.group3.mockbook.dto;
+package com.group3.mockbook.dto.Post;
 
 public class CreatePostDto {
     private String title;
