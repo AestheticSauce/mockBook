@@ -34,7 +34,7 @@ function Login(){
             jwtUtil.setToken(data.token);
             const user = await jwtUtil.getUserProfile();
             if (user) {
-                navigate(`/userprofile/${user.sub}`); // Redirect to user profile page
+                navigate(`/homepage`); // Redirect to home page
             } else {
                 setError("Failed to decode token. Please try again.");
             }
@@ -74,6 +74,12 @@ function Login(){
                 <button type="submit">Submit</button>
 
                 <p></p>
+                <small>Forgot password?</small>
+                <button type="button" onClick={() => window.location.href = "/password-reset"}>
+                    Reset Password
+                </button>
+                <br/>
+                <small>New user?</small>
                 <button type="button" onClick={() => window.location.href = "/Register"}>
                     Register
                 </button>

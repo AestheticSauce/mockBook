@@ -125,6 +125,10 @@ function UserProfileComponent() {
                         <option value="Offline">Offline</option>
                     </select>
                 </div>
+                <p></p>
+                <button type="button" onClick={() => window.location.href = "/homepage"}>
+                    Home Page
+                </button>
             </>
         );
 }
