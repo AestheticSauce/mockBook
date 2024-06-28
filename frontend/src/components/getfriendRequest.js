@@ -45,7 +45,7 @@ function GetFriendRequest() {
                     return (
                         <RequesteeControl
                             key={user.id}
-                            id={user.sourceUser.email}
+                            id={user.id}
                             userName={user.sourceUser.email}
                             onClick={() => removeRequest(user.sourceUser.id)}
                         />

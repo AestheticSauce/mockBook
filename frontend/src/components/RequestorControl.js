@@ -28,7 +28,7 @@ function RequestorControl({userName,id,onClick}){
                     <button onClick={()=>{
                     updateShow(false);
                     updatePending(true);
-                    add()}}>Add Friend</button>
+                    add();}}>Add Friend</button>
                     </div> :<></>}
                     
             { pending ? <div> 
