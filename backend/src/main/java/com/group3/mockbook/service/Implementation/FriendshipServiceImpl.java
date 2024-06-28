@@ -99,7 +99,7 @@ public class FriendshipServiceImpl implements FriendshipService {
 
         // Find all friendships for userId
         List<Friendship> friendships = friendshipRepository.findBySourceUserAndStatus(user, Friendship.RequestStatus.ACCEPTED);
-        
+        friendships.addAll(friendshipRepository.findByTargetUserAndStatus(user,Friendship.RequestStatus.ACCEPTED));
         return friendships;
     }
 }

@@ -1,24 +1,42 @@
-import { useState } from "react"
+import axios from "axios";
+import { useState } from "react";
 
-function RequesteeControl(prop){
-
-    const [show, setShow] = useState(true)
-
-    return(
-        <>
-        <link rel="stylesheet" href="https://matcha.mizu.sh/matcha.css"></link>
-        <div>
-            { show ? 
-            <div>
-                <p>{prop.firstName}&nbsp;{prop.lastName} Wants to be your friend</p>
-                <button onClick={()=> {setShow(false)}}>Accept</button>
-                <button onClick={()=> {setShow(false)}}>Reject</button>  
-            </div> :<></>
+function RequesteeControl({ userName, onClick }) {
+    function accept(){
+        axios({
+            method:'PUT',
+            url:'',
+            data:{
+                //data to be put here
             }
-        </div>
-        </>
-        
-    )
+        })
+    }
 
+    function Reject(){
+        axios({
+            method:'PUT',
+            url:'',
+            data:{
+                //data to be put here
+            }
+        })
+    }
+    return (
+        <>
+            <link rel="stylesheet" href="https://matcha.mizu.sh/matcha.css"></link>
+            <div>
+                    <div>
+                        <p>{userName} wants to be your friend</p>
+                        <button onClick={() => {
+                            onClick();
+                        }}>Accept</button>
+                        <button onClick={() => {
+                            onClick();
+                        }}>Reject</button>  
+                    </div>
+            </div>
+        </>
+    );
 }
-export default RequesteeControl
+
+export default RequesteeControl;
