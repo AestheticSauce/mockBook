@@ -35,13 +35,8 @@ public class UserController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Optional<User> getUserById(@PathVariable int id) {
-        Optional<User> user = userService.getUserById(id);
-        if (user.isEmpty()) {
-            throw new EntityNotFoundException("User not found with id: " + id);
-        } else {
-            return user;
-        }
+    public User getUserById(@PathVariable int id) {
+        return userService.getUserById(id);
     }
     
     @GetMapping("")
@@ -63,14 +58,10 @@ public class UserController {
     @PutMapping("/{id}/status")
     @ResponseStatus(HttpStatus.OK)
     public void updateStatus(@PathVariable int id, @RequestBody String status) {
-        Optional<User>optionalUser = userService.getUserById(id);
-        if (optionalUser.isEmpty()) {
-            throw new EntityNotFoundException("User not found with id: " + id);
-        } else {
-            User user = optionalUser.get();
-            user.setStatus(status);
-            userService.updateUser(user);
-        }
+        User optionalUser = userService.getUserById(id);
+        User user = optionalUser;
+        user.setStatus(status);
+        userService.updateUser(user);
     }
 
     @DeleteMapping("/{id}")
@@ -82,11 +73,8 @@ public class UserController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public User updateUser(@PathVariable int id, @RequestBody User userDetails) {
-        Optional<User> optionalUser = userService.getUserById(id);
-        if (optionalUser.isEmpty()) {
-            throw new EntityNotFoundException("User not found with id: " + id);
-        }
-        User user = optionalUser.get();
+        User optionalUser = userService.getUserById(id);
+        User user = optionalUser;
         user.setEmail(userDetails.getEmail());
         user.setPassword(userDetails.getPassword());
         user.setSecurityQuestion(userDetails.getSecurityQuestion());

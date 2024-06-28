@@ -6,6 +6,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.group3.mockbook.model.User;
 import com.group3.mockbook.repository.UserRepository;
 import com.group3.mockbook.service.Implementation.UserServiceImpl;
+
+import jakarta.persistence.EntityNotFoundException;
+
+import org.hibernate.proxy.EntityNotFoundDelegate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -62,30 +66,58 @@ public class UserServiceImplUnitTest {
     public void testGetUserById_Success() {
         Optional<User> user = Optional.of(new User());
         when(userRepository.findById(anyInt())).thenReturn(user);
-        Optional<User> result = userService.getUserById(1);
-        assertTrue(result.isPresent());
+        User result = userService.getUserById(1);
+        assertTrue(result != null);
     }
     
     @Test
     public void testGetUserById_NotFound() {
         when(userRepository.findById(anyInt())).thenReturn(Optional.empty());
-        Optional<User> result = userService.getUserById(999);
-        assertFalse(result.isPresent());
+        assertThrows(EntityNotFoundException.class, () -> userService.getUserById(999));
     }
     
     @Test
     public void testGetUserByEmail_Success() {
         Optional<User> user = Optional.of(new User());
         when(userRepository.findByEmail(anyString())).thenReturn(user);
-        Optional<User> result = userService.getUserByEmail("test@example.com");
-        assertTrue(result.isPresent());
+        User result = userService.getUserByEmail("test@example.com");
+        assertTrue(result != null);
     }
     
     @Test
     public void testGetUserByEmail_NotFound() {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
-        Optional<User> result = userService.getUserByEmail("nonexistent@example.com");
-        assertFalse(result.isPresent());
+        assertThrows(EntityNotFoundException.class, () -> userService.getUserByEmail("nonexistent@example.com"));
+    }
+
+    // Test cases for getUserByUsername
+    @Test
+    public void testGetUserByUsername_Success() {
+        Optional<User> user = Optional.of(new User());
+        when(userRepository.findByUsername(anyString())).thenReturn(user);
+        User result = userService.getUserByUsername("testuser");
+        assertTrue(result != null);
+    }
+
+    @Test
+    public void testGetUserByUsername_NotFound() {
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+        assertThrows(EntityNotFoundException.class, () -> userService.getUserByUsername("nonexistentuser"));
+    }
+
+    // Test cases for getUserByEmailAndPassword
+    @Test
+    public void testGetUserByEmailAndPassword_Success() {
+        Optional<User> user = Optional.of(new User());
+        when(userRepository.findByEmailAndPassword(anyString(), anyString())).thenReturn(user);
+        User result = userService.getUserByEmailAndPassword("user@example.com", "password");
+        assertTrue(result != null);
+    }
+
+    @Test
+    public void testGetUserByEmailAndPassword_NotFound() {
+        when(userRepository.findByEmailAndPassword(anyString(), anyString())).thenReturn(Optional.empty());
+        assertThrows(EntityNotFoundException.class, () -> userService.getUserByEmailAndPassword("notreal@example.com", "password"));
     }
     
     @Test

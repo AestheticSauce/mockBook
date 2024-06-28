@@ -6,6 +6,8 @@ import com.group3.mockbook.repository.FriendshipRepository;
 import com.group3.mockbook.service.FriendshipService;
 import com.group3.mockbook.service.UserService;
 
+import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,10 +29,10 @@ public class FriendshipServiceImpl implements FriendshipService {
         Friendship friendship = new Friendship();
 
         // set the source user
-        friendship.setSourceUser(userService.getUserById(sourceId).get());
+        friendship.setSourceUser(userService.getUserById(sourceId));
 
         // set the target user
-        friendship.setTargetUser(userService.getUserById(targetId).get());
+        friendship.setTargetUser(userService.getUserById(targetId));
 
         friendship.setStatus(Friendship.RequestStatus.PENDING);
 
@@ -39,14 +41,18 @@ public class FriendshipServiceImpl implements FriendshipService {
     }
 
     @Override
-    public Friendship acceptFriendshipRequest(Integer id) {
+    public Friendship acceptFriendshipRequest(Integer id) throws EntityNotFoundException{
         // Implement logic to accept a friendship request
         Optional<Friendship> friendship = friendshipRepository.findById(id);
         friendship.ifPresent(f -> {
             f.setStatus(Friendship.RequestStatus.ACCEPTED);
             friendshipRepository.save(f);
         });
-        return friendship.orElse(null);
+        if (friendship.isPresent()) {
+            return friendship.get();
+        } else {
+            throw new EntityNotFoundException("Friendship with id " + id + " not found");
+        }
     }
 
     @Override
@@ -79,27 +85,21 @@ public class FriendshipServiceImpl implements FriendshipService {
 
     @Override
     public List<Friendship> getFriendshipRequests(Integer userId) {
-        User user = userService.getUserById(userId).get();
+        User user = userService.getUserById(userId);
 
         // Find all friendships for userId
-        List<Friendship> friendships = friendshipRepository.findByTargetUser(user);
+        List<Friendship> friendships = friendshipRepository.findByTargetUserAndStatus(user, Friendship.RequestStatus.PENDING);
         
-        // Filter for pending status
-        friendships.removeIf(f -> f.getStatus() != Friendship.RequestStatus.PENDING);
-
         return friendships;
     }
 
     @Override
     public List<Friendship> getFriendships(Integer userId) {
-        User user = userService.getUserById(userId).get();
+        User user = userService.getUserById(userId);
 
         // Find all friendships for userId
-        List<Friendship> friendships = friendshipRepository.findBySourceUser(user);
+        List<Friendship> friendships = friendshipRepository.findBySourceUserAndStatus(user, Friendship.RequestStatus.ACCEPTED);
         
-        // Filter for accepted status
-        friendships.removeIf(f -> f.getStatus() != Friendship.RequestStatus.ACCEPTED);
-
         return friendships;
     }
 }

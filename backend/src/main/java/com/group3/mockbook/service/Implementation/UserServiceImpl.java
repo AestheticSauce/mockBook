@@ -10,6 +10,8 @@ import com.group3.mockbook.model.User;
 import com.group3.mockbook.repository.UserRepository;
 import com.group3.mockbook.service.UserService;
 
+import jakarta.persistence.EntityNotFoundException;
+
 /**
  * UserServiceImpl is a class that implements the UserService interface.
  * It is used to perform CRUD operations on the User entity.
@@ -22,7 +24,7 @@ public class UserServiceImpl implements UserService{
     private UserRepository userRepository;
 
     @Override
-    public User saveUser(User user) {
+    public User saveUser(User user) throws IllegalArgumentException {
         if (user == null) {
             throw new IllegalArgumentException("User cannot be null");
         }
@@ -31,31 +33,47 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<User> getAllUsers() {
-        // Implementation goes here
         return userRepository.findAll();
     }
 
     @Override
-    public Optional<User> getUserById(int id) {
-        return userRepository.findById(id);
+    public User getUserById(int id) throws EntityNotFoundException{
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw new EntityNotFoundException("User with id " + id + " not found");
+        }
     }
 
     @Override
-    public Optional<User> getUserByEmail(String email) {
-        // Implementation goes here
-        return userRepository.findByEmail(email);
+    public User getUserByEmail(String email) throws EntityNotFoundException {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw new EntityNotFoundException("User with email " + email + " not found");
+        }
     }
 
     @Override
-    public Optional<User> getUserByUsername(String username) {
-        // Implementation goes here
-        return userRepository.findByUsername(username);
+    public User getUserByUsername(String username) throws EntityNotFoundException{
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw new EntityNotFoundException("User with username " + username + " not found");
+        }
     }
 
     @Override
-    public Optional<User> getUserByEmailAndPassword(String email, String password) {
-        // Implementation goes here
-        return userRepository.findByEmailAndPassword(email, password);
+    public User getUserByEmailAndPassword(String email, String password) throws EntityNotFoundException{
+        Optional<User> user = userRepository.findByEmailAndPassword(email, password);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw new EntityNotFoundException("User with email " + email + " and password not found");
+        }
     }
 
     @Override

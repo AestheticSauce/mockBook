@@ -28,7 +28,7 @@ public class PostServiceImpl implements PostService{
     public Post createPost(CreatePostDto post, UserPrincipal userPrincipal) {
         // convert post dto to post entity
         Post newPost = new Post();
-        newPost.setAuthor(userService.getUserById(userPrincipal.getId()).get());
+        newPost.setAuthor(userService.getUserById(userPrincipal.getId()));
         newPost.setContent(post.getContent());
         newPost.setTitle(post.getTitle());
 

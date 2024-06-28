@@ -68,14 +68,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public void resetPassword(String email, String securityAnswer, String newPassword) {
-        Optional<User> user = userService.getUserByEmail(email);
-        if (user.isEmpty()) {
-            throw new EntityNotFoundException("User not found with email: " + email);
-        }
+        User user = userService.getUserByEmail(email);
 
-        if (user.get().getSecurityAnswer().equals(securityAnswer)) {
-            user.get().setPassword(passwordEncoder.encode(newPassword));
-            userService.saveUser(user.get());
+        if (user.getSecurityAnswer().equals(securityAnswer)) {
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userService.saveUser(user);
         } else{
             throw new BadCredentialsException("Security answer is incorrect");
         }
