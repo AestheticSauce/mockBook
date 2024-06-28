@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom";
 import React, {useState} from "react";
 import {useNavigate} from 'react-router-dom';
 import * as jwtUtil from "../jwt.js";
+
+import { Link } from "react-router-dom";
 
 function Login(){
     // State to manage password masking
@@ -32,7 +33,6 @@ function Login(){
             const data = await response.json();
             jwtUtil.setToken(data.token);
             const user = await jwtUtil.getUserProfile();
-            console.log('user:', user);
             if (user) {
                 navigate(`/userprofile/${user.sub}`); // Redirect to user profile page
             } else {
@@ -46,9 +46,6 @@ function Login(){
 
     return (
         <div>
-            <h2>Login</h2>
-            {/* Add your login form here */}
-            <Link to="/password-reset">Forgot Password?</Link>
             <h1>Login</h1>
             <form onSubmit={handleLogin}>
                 <label htmlFor="email">Email</label>

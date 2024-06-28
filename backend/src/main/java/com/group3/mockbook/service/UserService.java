@@ -20,6 +20,7 @@ public interface UserService {
 
     User updateUser(User user);
 
+
     void deleteUser(int id);
 
     void resetPassword(String email, String securityAnswer, String newPassword);

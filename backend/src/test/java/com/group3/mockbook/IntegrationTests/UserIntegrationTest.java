@@ -107,26 +107,21 @@ public class UserIntegrationTest {
                                 .andExpect(status().isForbidden());
         }
 
-        @Test
-        @WithMockUser
-        public void testUpdateUser() throws Exception {
-                // Get the user to update
-                UserDTO updatedUser = new UserDTO();
-                updatedUser.setEmail("updatedEmail@dal.ca");
-                updatedUser.setId(2);
-                updatedUser.setUsername("updatedUsername");
-                updatedUser.setPassword("updatedPassword");
-                updatedUser.setSecurityQuestion("What is your favorite book?");
-                updatedUser.setSecurityAnswer("1984");
+    @Test
+    @WithMockUser
+    public void testUpdateUser() throws Exception {
+        // Get the user to update
+        User updatedUser = new User("newuser@example.com", "newuser", "newpassword", "What is your favorite book?",
+                "1984");
+        updatedUser.setId(2);
+        String updatedUserJson = new ObjectMapper().writeValueAsString(updatedUser);
 
-                String updatedUserJson = new ObjectMapper().writeValueAsString(updatedUser);
-
-                // Update the user
-                MvcResult result = api.perform(put("/users")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(updatedUserJson))
-                                .andExpect(status().isOk())
-                                .andReturn();
+        // Update the user
+        MvcResult result = api.perform(put("/users/2")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(updatedUserJson))
+                .andExpect(status().isOk())
+                .andReturn();
 
                 // Verify the user was updated
                 User responseUser = new ObjectMapper().readValue(result.getResponse().getContentAsString(), User.class);

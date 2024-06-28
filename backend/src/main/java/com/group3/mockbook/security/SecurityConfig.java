@@ -30,6 +30,7 @@ public class SecurityConfig {
 	@Autowired
 	CustomUserDetailService customUserDetailService;
 
+
 	@Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -44,6 +45,16 @@ public class SecurityConfig {
 				.permitAll()
 				.anyRequest().authenticated()
 				)
+			.cors(
+				(cors) -> cors
+					.configurationSource((request) -> {
+						var corsConfiguration = new org.springframework.web.cors.CorsConfiguration();
+						corsConfiguration.setAllowedOriginPatterns(java.util.List.of("*"));
+						corsConfiguration.setAllowedMethods(java.util.List.of("*"));
+						corsConfiguration.setAllowedHeaders(java.util.List.of("*"));
+						return corsConfiguration;
+					})
+			)
 
 			;
 		return http.build();
