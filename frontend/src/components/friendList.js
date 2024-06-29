@@ -43,6 +43,7 @@ function FriendList() {
                                  .map(user => (
                                      <Friend key={user.sourceUser.id}
                                              id={user.id}
+                                             friendId={user.sourceUser.id}
                                              username={user.sourceUser.email} 
                                              onClick={() => removeFriend(user.sourceUser.id)} />
                                  ));
