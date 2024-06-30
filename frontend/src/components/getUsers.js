@@ -37,23 +37,28 @@ function GetUsers() {
     }, [show]);
 
     useEffect(() => {
-        if (users.length > 0) {
-            const currentUser = getUserProfile
-            const friendRequests = users
-                .filter(user => user && !processedRequests.has(user.id) && currentUser.id !== user.id)
-                .map(user => {
-                    console.log("User data:", user.sourceUser); // Debug log
-                    return (
-                        <RequestorControl
-                            key={user.id}
-                            id={user.id}
-                            userName={user.email}
-                            onClick={() => removeRequest(user.sourceUser.id)}
-                        />
-                    );
-                });
-                updateCurrUsers(friendRequests);
+        const getUserProfiles = async () => {
+            if (users.length > 0) {
+                const currentUser = await getUserProfile()
+                const friendRequests = users
+                    .filter(user => user && !processedRequests.has(user.id) && currentUser.id !== user.id)
+                    .map(user => {
+                        if (user.id != currentUser.id) {
+                            console.log("User data:", user.sourceUser); // Debug log
+                            return (
+                                <RequestorControl
+                                    key={user.id}
+                                    id={user.id}
+                                    userName={user.email}
+                                    onClick={() => removeRequest(user.sourceUser.id)}
+                                />
+                            );
+                        }
+                    });
+                    updateCurrUsers(friendRequests);
+            }
         }
+        getUserProfiles();
 
     }, [users, processedRequests]);
 
