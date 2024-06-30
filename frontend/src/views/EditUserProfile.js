@@ -40,6 +40,13 @@ function EditUserProfile() {
                 }
 
                 const result = await response.json();
+
+                formData.username = result.username;
+                formData.biography = result.biography;
+                formData.birthday = result.birthday;
+                formData.degree = result.degree;
+                formData.favFood = result.favFood;
+
                 setUser(result);
                 setLoading(false);
             } catch (error) {
