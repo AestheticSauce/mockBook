@@ -2,15 +2,10 @@ package com.group3.mockbook.IntegrationTests;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.group3.mockbook.dto.Authorization.RegistrationRequestDto;
-import com.group3.mockbook.dto.Authorization.PasswordResetDto;
 import com.group3.mockbook.dto.Post.CreatePostDto;
 import com.group3.mockbook.dto.Post.UpdatePostDto;
 import com.group3.mockbook.model.Post;
-import com.group3.mockbook.model.User;
 import com.group3.mockbook.utilities.WithMockUser;
-import com.group3.mockbook.dto.Authorization.LoginRequestDto;
-import com.group3.mockbook.dto.Authorization.LoginResponseDto;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

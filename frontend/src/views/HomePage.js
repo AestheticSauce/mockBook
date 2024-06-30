@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import * as jwtUtils from "../jwt.js";
+import { useForm } from "react-hook-form";
 import '../HomePageStyles.css';
 
 const HomePage = () => {
@@ -9,6 +10,7 @@ const HomePage = () => {
     const [friendsPosts, setFriendsPosts] = useState([]);
     const [nonFriends, setNonFriends] = useState([]);
     const [error, setError] = useState(null);
+    const { register, handleSubmit, reset } = useForm();
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -82,6 +84,31 @@ const HomePage = () => {
         fetchFriendsPosts();
     }, []);
 
+    const createPost = (data) => {
+        try {
+            axios.post("http://localhost:8085/v1/api/posts", {
+                title: data.title,
+                content: data.content
+            }, {
+                headers: {
+                    "Authorization": `Bearer ${jwtUtils.getToken()}`,
+                    "Content-Type": "application/json"
+                }
+            }).then(
+                response => {
+                    if (response.status !== 200) {
+                        console.error("Error creating post:", response);
+                        setError("Error creating post");
+                    }
+                }
+            );
+            //reset(); // Reset form fields after submission
+        } catch (error) {
+            console.error("Error creating post:", error);
+            setError("Error creating post");
+        }
+    };
+
     if (error) {
         return <div>{error}</div>;
     }
@@ -97,6 +124,18 @@ const HomePage = () => {
 
             <div className="main-content">
                 <div className="posts-panel">
+                    <div className="post-form">
+                        <h2>Create a Post</h2>
+                        <form onSubmit={handleSubmit(createPost)}>
+                            <label htmlFor="title">Title:</label><br/>
+                            <input type="text" id="title" name="title" {...register("title", {required: "Required"})} /><br/>
+                            <label htmlFor="content">Content:</label><br/>
+                            <textarea id="content" name="content" {...register("content", {required: "content"})} /><br/>
+                            <button type="submit">
+                                Create Post
+                            </button>
+                        </form>
+                    </div>
                     <h2>My Friends' Posts</h2>
                     <ul>
                         {friendsPosts.map((friendsPost, index) => (
