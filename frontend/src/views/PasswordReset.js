@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { redirect } from "react-router-dom";
+import {redirect, useNavigate} from "react-router-dom";
 
 function PasswordReset() {
     const { register, handleSubmit, formState: { errors }, setError } = useForm();
@@ -9,6 +9,7 @@ function PasswordReset() {
     const [securityAnswer, setSecurityAnswer] = useState('');
     const [email, setEmail] = useState('');
     const [step, setStep] = useState(1);
+    const navigate = useNavigate();
 
     const handleSecurityQuestionSubmit = (data) => {
         fetch(`http://localhost:8085/v1/api/auth/security-question?email=${data.email}`, {
@@ -43,7 +44,7 @@ function PasswordReset() {
             if (!response.ok) {
                 setError("newPassword", { type: "manual", message: "Password reset failed" });
             } else {
-                redirect("/login");
+                navigate("/Login");
             }
         })
         .catch((error) => {
