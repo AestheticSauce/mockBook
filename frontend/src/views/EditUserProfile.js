@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
 import { getToken, getUserProfile } from "../jwt";
+import Logout from "../components/Logout";
 function EditUserProfile() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null); // handling who the user is
@@ -127,6 +128,7 @@ function EditUserProfile() {
     return (
         <form onSubmit={handleSave}>
             <div>
+                <Logout/>
                 <label>Username:</label>
                 <input type="text" name="username" value={formData.username} onChange={handleChange} />
             </div>
