@@ -17,7 +17,11 @@ function RequestorControl({userName,id,onClick}){
                  "Authorization": `Bearer ${token}`,
                  "Content-Type": "application/json",
              }
-         }).then(response=>{console.log(response)})
+         }).then(response=>{console.log(response)}).catch(error => {
+            console.error("Error adding friend:", error.response || error.message);
+            updateShow(true); 
+            updatePending(false);
+        });
     }
     return(
         <>

@@ -235,8 +235,10 @@ const HomePage = () => {
                           "Authorization": `Bearer ${jwtUtils.getToken()}`,
                           "Content-Type": "application/json",
                       }
+                  }).catch(error =>{
+                    e.target.innerHTML = 'Add Friend'
                   })
-                  e.target.innerHTML = 'PENDING'
+                  e.target.innerHTML = 'pending'
                 }
                 }
                 >

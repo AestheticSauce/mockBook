@@ -17,7 +17,6 @@ function FriendList() {
     useEffect(() => {
         if (show) {
             const fetchReq = async () => {
-                try {
                     const token = getToken().trim()
                     console.log(token)
                     const response = await axios({
@@ -27,11 +26,10 @@ function FriendList() {
                             "Authorization": `Bearer ${token}`,
                             "Content-Type": "application/json",
                         }
+                    }).catch(error=>{
+                        console.log(error);
                     });
                     updateUsers(response.data); 
-                } catch (err) {
-                    console.log(err);
-                }
             };
            fetchReq();
         }

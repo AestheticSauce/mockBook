@@ -13,6 +13,8 @@ function Friend({ id, username, friendId, onClick }) {
                 "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json",
             }
+        }).catch(error=>{
+            console.log(error)
         });
     }
     return (
