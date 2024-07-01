@@ -4,6 +4,7 @@ import {getToken, getUserProfile} from "../jwt"; // Assuming you use react-route
 import FriendList from '../components/friendList';
 import GetFriendRequest from '../components/getfriendRequest';
 import GetUsers from '../components/getUsers';
+import Logout from "../components/Logout";
 function UserProfileComponent() {
         const [user, setUser] = useState({});
         const [loading, setLoading] = useState(true);
@@ -130,6 +131,7 @@ function UserProfileComponent() {
             <>
                 <div>
                     <h1>{user.username || "Please set your username"}</h1>
+                    <Logout/>
                     <p>Email: {user.email || "Not updated by user"}</p>
                     <p>Bio: {user.biography || "Not updated by user"}</p>
                     <p>Favourite food: {user.favFood || "Not updated by user"}</p>marin

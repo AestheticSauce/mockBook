@@ -3,6 +3,7 @@ import axios from "axios";
 import * as jwtUtils from "../jwt.js";
 import { useForm } from "react-hook-form";
 import "../HomePageStyles.css";
+import Logout from "../components/Logout";
 
 const HomePage = () => {
   const [user, setUser] = useState(null);
@@ -133,6 +134,7 @@ const HomePage = () => {
         >
           My Profile
         </button>
+                <Logout/>
       </div>
 
       <div className="main-content">

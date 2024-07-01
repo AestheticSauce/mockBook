@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import React, { useState } from  "react";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Button, Modal } from "react-bootstrap";
 
 function Register() {
   const {
@@ -11,7 +12,9 @@ function Register() {
   } = useForm();
 
   // State to manage password masking
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const onSubmit = (data) => {
     fetch("http://localhost:8085/v1/api/auth/register", {
@@ -25,7 +28,10 @@ function Register() {
         if (!response.ok) {
           setError("root.serverError", {type: response.status, message: response.statusText})
         }
-        redirect("/Login");
+        setShowModal(true);
+        setTimeout(() => {
+          navigate("/Login");
+        }, 2000); // redirect after 2 seconds
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -35,6 +41,18 @@ function Register() {
 
   return (
     <div>
+      <style>{`
+        .modal-content {
+          text-align: center;
+        }
+        .modal-body p {
+          margin: 0;
+        }
+        .modal-header, .modal-body, .modal-footer {
+          color: #000000;
+        }
+      `}</style>
+
       <h1>Register</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="email">Email</label>
@@ -103,6 +121,24 @@ function Register() {
           Login
         </button>
       </form>
+
+      <Modal
+          show={showModal}
+          onHide={() => setShowModal(false)}
+          centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Registration Successful!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          You will be redirected to the login page shortly.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }
