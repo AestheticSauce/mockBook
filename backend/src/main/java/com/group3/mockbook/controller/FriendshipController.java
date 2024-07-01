@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.group3.mockbook.dto.Friendship.FriendRequestDto;
 import com.group3.mockbook.model.Friendship;
+import com.group3.mockbook.model.User;
 import com.group3.mockbook.security.UserPrincipal;
 import com.group3.mockbook.service.FriendshipService;
 
@@ -66,5 +67,10 @@ public class FriendshipController {
     @ResponseStatus(HttpStatus.OK)
     public Friendship getFriendship(@PathVariable Integer id) {
         return friendRequestService.getFriendshipDetails(id);
+    }
+
+    @GetMapping("/recommended")
+    public List<User> getRecommendedFriends(@CurrentSecurityContext(expression="authentication.principal") UserPrincipal userPrincipal) {
+        return friendRequestService.getRecommendedFriends(userPrincipal);
     }
 }

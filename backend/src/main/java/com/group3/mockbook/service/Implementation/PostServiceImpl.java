@@ -99,6 +99,9 @@ public class PostServiceImpl implements PostService{
             }
         }
 
+        // get user's posts
+        postRepository.findAllByAuthor(userService.getUserById(userPrincipal.getId())).forEach(friendsPosts::add);
+
         return friendsPosts;
     }
 }

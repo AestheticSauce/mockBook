@@ -4,6 +4,7 @@ import com.group3.mockbook.model.Friendship;
 import com.group3.mockbook.model.User;
 import com.group3.mockbook.model.Friendship.RequestStatus;
 import com.group3.mockbook.repository.FriendshipRepository;
+import com.group3.mockbook.security.UserPrincipal;
 import com.group3.mockbook.service.FriendshipService;
 import com.group3.mockbook.service.UserService;
 
@@ -106,5 +107,32 @@ public class FriendshipServiceImpl implements FriendshipService {
         friendships.addAll(friendshipRepository.findByTargetUserAndStatus(user, Friendship.RequestStatus.ACCEPTED));
         
         return friendships;
+    }
+
+        @Override
+    public List<User> getRecommendedFriends(UserPrincipal userPrincipal) {
+        int id = userPrincipal.getId();
+
+        List<Friendship> friends = getFriendships(id);
+
+        List<User> allUsers = userService.getAllUsers();
+
+        List<User> recommendedFriends = new ArrayList<User>();
+
+        // search through all users and add the ones that are not friends
+        for (User user : allUsers) {
+            boolean isFriend = false;
+            for (Friendship friend : friends) {
+                if (friend.getSourceUser().getId() == user.getId() || friend.getTargetUser().getId() == user.getId() || user.getId() == id){
+                    isFriend = true;
+                    break;
+                }
+            }
+            if (!isFriend) {
+                recommendedFriends.add(user);
+            }
+        }
+
+        return recommendedFriends;
     }
 }

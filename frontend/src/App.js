@@ -3,6 +3,7 @@ import {
     RouterProvider,
 } from "react-router-dom";
 import Register from "./views/Register";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState } from "react";
 import Login from "./views/Login";
 import PasswordReset from "./views/PasswordReset";

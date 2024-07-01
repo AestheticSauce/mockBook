@@ -23,7 +23,7 @@ function RequestorControl({userName,id,onClick}){
         <>
         <link rel="stylesheet" href="https://matcha.mizu.sh/matcha.css"></link>
         <div>
-            <p>{userName}</p>
+            <p><a href={`/userprofile/${id}`}>{userName}</a></p>
             {show ? <div>
                     <button onClick={()=>{
                     updateShow(false);
