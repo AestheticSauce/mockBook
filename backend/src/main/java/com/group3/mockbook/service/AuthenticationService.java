@@ -13,4 +13,6 @@ public interface AuthenticationService {
     public void resetPassword(String email, String securityAnswer, String newPassword);
 
     public SecurityQuestionDto getSecurityQuestion(String email);
+
+    public void logout();
 }

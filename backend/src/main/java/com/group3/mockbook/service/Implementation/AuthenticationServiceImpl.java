@@ -85,4 +85,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return new SecurityQuestionDto(user.getEmail(), user.getSecurityQuestion());
     }
     
+    @Override
+    public void logout() {
+        SecurityContextHolder.clearContext();
+    }
 }

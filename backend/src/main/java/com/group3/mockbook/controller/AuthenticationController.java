@@ -22,6 +22,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -57,5 +58,11 @@ public class AuthenticationController {
     @ResponseStatus(HttpStatus.OK)
     public SecurityQuestionDto putSecurityQuestion(@RequestParam String email) {
         return authenticationService.getSecurityQuestion(email);
+    }
+
+    @DeleteMapping("/logout")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteLogout() {
+        authenticationService.logout();
     }
 }
