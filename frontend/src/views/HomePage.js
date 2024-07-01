@@ -201,12 +201,7 @@ const HomePage = () => {
             {console.log(friendships)}
             {
             friendships.map((friendship, index) => {
-              let friend;
-              if (friendship.sourceUser.id !== user.id) {
-                 friend = friendship.sourceUser;
-              } else {
-                 friend = friendship.targetUser;
-              }
+              let friend = friendship.sourceUser
               return (
                 <li key={index}>
                 <h3>
@@ -227,7 +222,7 @@ const HomePage = () => {
                 <h3>{nonFriend.username}</h3>
                 <button
                     type="button"
-                    onClick={() => axios({
+                    onClick={(e) =>  {axios({
                       method: 'POST',
                       url: `http://localhost:8085/v1/api/friendships`,
                       data:{
@@ -237,7 +232,10 @@ const HomePage = () => {
                           "Authorization": `Bearer ${jwtUtils.getToken()}`,
                           "Content-Type": "application/json",
                       }
-                  }).then(response=>{console.log(response)})}
+                  })
+                  e.target.innerHTML = 'PENDING'
+                }
+                }
                 >
                   add friend
                 </button>
