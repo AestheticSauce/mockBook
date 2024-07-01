@@ -7,10 +7,10 @@ import GetUsers from '../components/getUsers';
 import Logout from "../components/Logout";
 function UserProfileComponent() {
         const [user, setUser] = useState({});
-        const [loading, setLoading] = useState(true);
         const [error, setError] = useState(null);
         const navigate = useNavigate();
         const [tokenId, setTokenId] = useState(``);
+        const [logOut, setLogOut] = useState(true);
 
         const handleEditClick = () => {
             const handleEditClick = async () => {
@@ -34,10 +34,17 @@ function UserProfileComponent() {
         // Effect to pull in user data
         useEffect(() => {
             const fetchUser = async () => {
-                try {
+                const token = getToken()
+                        if (token == null){
+                        setTimeout(() => {
+                            navigate(`Login`);
+                        }, 1000);
+                        return;
+                    }
+                    try{
+                        const token = getToken().trim();
                     const userProfile = await getUserProfile(); //used for validation of button display
                     setTokenId(userProfile.id);
-                    const token =getToken().trim();
                     console.log(`Token ${token}`);
                     const myHeaders = {
                         "Authorization": `Bearer ${token}`,
@@ -65,34 +72,24 @@ function UserProfileComponent() {
                     setUser(result);
                     console.log(`user data:`,user.data)
                     navigate(`/userprofile/${result.id}/`);
-                    setLoading(false);
+                    setLogOut(false);
                 } catch (error) {
                     setError(error);
-                    setLoading(false);
                 }
             };
             fetchUser();
 
         }, [navigate]);
 
-    useEffect(() => {
-        console.log('User data updated:', user.id);
-        console.log(`ID`, id);
-        console.log(`token id`,tokenId);
-        console.log( `=`,parseInt(id) ===  parseInt(tokenId) )
-    }, [user]);
-
             const setStatus = async (selectedStatus) => {
                 try {
                     const userProfile = await getUserProfile();
                     const token = getToken().trim();
-                    console.log(`Token ${token}`);
                     const myHeaders = {
                         "Authorization": `Bearer ${token}`,
                         "Content-Type": "application/json",
                         "Accept": "application/json"
                     };
-                    console.log('Headers:', myHeaders);
                     const requestOptions = {
                         method: "PUT",
                         headers: myHeaders,
@@ -126,7 +123,7 @@ function UserProfileComponent() {
         }
     };
 
-
+    if(logOut) return <h1>Please Login to access content </h1>
         return (
             <>
                 <div>

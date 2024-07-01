@@ -4,6 +4,8 @@ import * as jwtUtils from "../jwt.js";
 import { useForm } from "react-hook-form";
 import '../HomePageStyles.css';
 import Logout from "../components/Logout";
+import {getToken} from "../jwt.js";
+import {useLocation, useNavigate} from 'react-router-dom';
 
 const HomePage = () => {
     const [user, setUser] = useState(null);
@@ -13,8 +15,17 @@ const HomePage = () => {
     const [error, setError] = useState(null);
     const { register, handleSubmit, reset } = useForm();
 
+    const navigate = useNavigate();
     useEffect(() => {
         const fetchUser = async () => {
+            const token = getToken()
+            if (token == null){
+                setTimeout(() => {
+                    navigate(`Login`);
+                }, 1000);
+                return;
+            }
+
             try {
                 const userProfile = await jwtUtils.getUserProfile();
                 console.log(userProfile);
@@ -24,9 +35,8 @@ const HomePage = () => {
                 setError("Unauthorized access")
             }
         }
-
         fetchUser();
-    }, []);
+    }, [navigate]);
 
     useEffect(() => {
         const fetchFriends = async () => {
@@ -110,9 +120,8 @@ const HomePage = () => {
         }
     };
 
-    if (error) {
-        return <div>{error}</div>;
-    }
+    if (error) {return <div>{error}</div>;}
+
 
     return (
         <div className="container">
