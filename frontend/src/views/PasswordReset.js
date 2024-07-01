@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import {redirect, useNavigate} from "react-router-dom";
+import {Button, Modal} from "react-bootstrap";
 
 function PasswordReset() {
     const { register, handleSubmit, formState: { errors }, setError } = useForm();
@@ -10,6 +11,7 @@ function PasswordReset() {
     const [email, setEmail] = useState('');
     const [step, setStep] = useState(1);
     const navigate = useNavigate();
+    const [showResetSuccess, setShowResetSuccess] = useState(false);
 
     const handleSecurityQuestionSubmit = (data) => {
         fetch(`http://localhost:8085/v1/api/auth/security-question?email=${data.email}`, {
@@ -44,7 +46,10 @@ function PasswordReset() {
             if (!response.ok) {
                 setError("newPassword", { type: "manual", message: "Password reset failed" });
             } else {
-                navigate("/Login");
+                setShowResetSuccess(true);
+                setTimeout(() => {
+                    navigate("/Login");
+                }, 2000); // redirect after 2 seconds
             }
         })
         .catch((error) => {
@@ -55,6 +60,7 @@ function PasswordReset() {
 
     return (
         <div>
+
             {step === 1 && (
                 <form onSubmit={handleSubmit(handleSecurityQuestionSubmit)}>
                     <h2>Reset Password</h2>
@@ -97,6 +103,36 @@ function PasswordReset() {
                     {errors.submit && <p>{errors.submit.message}</p>}
                 </form>
             )}
+
+            <style>{`
+                .modal-content {
+                    text-align: center;
+                }
+                .modal-body p {
+                    margin: 0;
+                }
+                .modal-header, .modal-body, .modal-footer {
+                    color: #000000;
+                }
+            `}</style>
+
+            <Modal
+                show={showResetSuccess}
+                onHide={() => setShowResetSuccess(false)}
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Password Reset Successful!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    You will be redirected to the login page shortly.
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowResetSuccess(false)}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 }
