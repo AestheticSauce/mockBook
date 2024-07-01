@@ -14,30 +14,37 @@ function Register() {
   // State to manage password masking
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const [showModalSuccess, setShowModalSuccess] = useState(false);
+  const [showModalFailure, setShowModalFailure] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const onSubmit = (data) => {
-    fetch("http://localhost:8085/v1/api/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          setError("root.serverError", {type: response.status, message: response.statusText})
-          return;
-        }
-        setShowModal(true);
+  const onSubmit = async (data) => {
+    try {
+      const response =  await fetch("http://localhost:8085/v1/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        setErrorMessage(errorText);
+        setShowModalFailure(true);
         setTimeout(() => {
           navigate("/Login");
+        }, 5000); // redirect after 5 seconds
+        return;
+      }
+      setShowModalSuccess(true);
+      setTimeout(() => {
+        navigate("/Login");
         }, 2000); // redirect after 2 seconds
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        setError("submit", {type: "custom", message: error.message})
-      });
+    } catch (error) {
+      console.error("Error:", error);
+      setError("submit", {type: "custom", message: error.message})
+    }
   };
 
   return (
@@ -124,8 +131,8 @@ function Register() {
       </form>
 
       <Modal
-          show={showModal}
-          onHide={() => setShowModal(false)}
+          show={showModalSuccess}
+          onHide={() => setShowModalSuccess(false)}
           centered
       >
         <Modal.Header closeButton>
@@ -135,7 +142,25 @@ function Register() {
           You will be redirected to the login page shortly.
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
+          <Button variant="secondary" onClick={() => setShowModalSuccess(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal
+          show={showModalFailure}
+          onHide={() => setShowModalFailure(false)}
+          centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Registration Failed!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>{errorMessage}</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModalFailure(false)}>
             Close
           </Button>
         </Modal.Footer>

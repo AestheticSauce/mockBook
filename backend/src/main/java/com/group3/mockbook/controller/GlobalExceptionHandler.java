@@ -1,5 +1,6 @@
 package com.group3.mockbook.controller;
 
+import com.group3.mockbook.exceptions.DuplicateEmailException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -14,6 +15,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value=EntityNotFoundException.class)
     public ResponseEntity<String> handleUserNotFoundException(EntityNotFoundException e) {
         ResponseEntity<String> response = new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+        return response;
+    }
+
+    @ExceptionHandler(value = DuplicateEmailException.class)
+    public ResponseEntity<String> handleDuplicateEmailException(DuplicateEmailException e) {
+        ResponseEntity<String> response = new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
         return response;
     }
 
