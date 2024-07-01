@@ -198,10 +198,13 @@ const HomePage = () => {
         <div className="friends-list">
           <h2>My Friends</h2>
           <ul>
-            {console.log(friendships)}
+            
             {
             friendships.map((friendship, index) => {
-              let friend = friendship.sourceUser
+              let friend = friendship.targetUser;
+              if(friend.id === Number(user.id)){
+                  friend = friendship.sourceUser;
+              }
               return (
                 <li key={index}>
                 <h3>
