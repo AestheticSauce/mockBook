@@ -39,6 +39,7 @@ const HomePage = () => {
             },
           }
         );
+        console.log(response.data);
         setFriendships(response.data);
       } catch (error) {
         console.error("Error fetching friends:", error);
@@ -187,20 +188,25 @@ const HomePage = () => {
         <div className="friends-list">
           <h2>My Friends</h2>
           <ul>
-            {friendships.map((friendship, index) => {
+            {console.log(friendships)}
+            {
+            friendships.map((friendship, index) => {
+              let friend;
               if (friendship.sourceUser.id !== user.id) {
-                var friend = friendship.sourceUser;
+                 friend = friendship.sourceUser;
               } else {
-                var friend = friendship.targetUser;
+                 friend = friendship.targetUser;
               }
-              <li key={index}>
+              return (
+                <li key={index}>
                 <h3>
                   <a href={`/userprofile/${friend.id}`}>
                     {friend.username}
                   </a>
                 </h3>
                 <small>Status: {friend.status}</small>
-              </li>;
+              </li>
+              )
             })}
           </ul>
 
