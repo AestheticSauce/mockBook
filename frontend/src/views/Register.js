@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import React, { useState } from  "react";
-import { redirect } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
   const {
@@ -11,6 +11,7 @@ function Register() {
   } = useForm();
 
   // State to manage password masking
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = (data) => {
@@ -25,7 +26,7 @@ function Register() {
         if (!response.ok) {
           setError("root.serverError", {type: response.status, message: response.statusText})
         }
-        redirect("/Login");
+        navigate("/Login");
       })
       .catch((error) => {
         console.error("Error:", error);
