@@ -9,6 +9,7 @@ function UserProfileComponent() {
         const [loading, setLoading] = useState(true);
         const [error, setError] = useState(null);
         const navigate = useNavigate();
+        const [tokenId, setTokenId] = useState(``);
 
         const handleEditClick = () => {
             const handleEditClick = async () => {
@@ -33,7 +34,8 @@ function UserProfileComponent() {
         useEffect(() => {
             const fetchUser = async () => {
                 try {
-                    const userProfile = await getUserProfile();
+                    const userProfile = await getUserProfile(); //used for validation of button display
+                    setTokenId(userProfile.id);
                     const token =getToken().trim();
                     console.log(`Token ${token}`);
                     const myHeaders = {
@@ -48,7 +50,7 @@ function UserProfileComponent() {
                         redirect: "follow"
                     };
 
-                    
+
 
                     const response = await fetch(`http://localhost:8085/v1/api/users/${id}`, requestOptions)
                     console.log('Response Headers:', response.headers);
@@ -60,7 +62,6 @@ function UserProfileComponent() {
                     const result = await response.json();
                     console.log('Result:', result);
                     setUser(result);
-                    user = result;
                     console.log(`user data:`,user.data)
                     navigate(`/userprofile/${result.id}/`);
                     setLoading(false);
@@ -74,7 +75,10 @@ function UserProfileComponent() {
         }, [navigate]);
 
     useEffect(() => {
-        console.log('User data updated:', user);
+        console.log('User data updated:', user.id);
+        console.log(`ID`, id);
+        console.log(`token id`,tokenId);
+        console.log( `=`,parseInt(id) ===  parseInt(tokenId) )
     }, [user]);
 
             const setStatus = async (selectedStatus) => {
@@ -128,12 +132,14 @@ function UserProfileComponent() {
                     <h1>{user.username || "Please set your username"}</h1>
                     <p>Email: {user.email || "Not updated by user"}</p>
                     <p>Bio: {user.biography || "Not updated by user"}</p>
-                    <p>Favourite food: {user.favFood || "Not updated by user"}</p>
+                    <p>Favourite food: {user.favFood || "Not updated by user"}</p>marin
                     <p>Birthday: {user.birthday || "Not updated by user"}</p>
                     <p>Degree: {user.degree || "Not updated by user"}</p>
-                    <button onClick={handleEditClick}>Edit Profile</button>
+
                 </div>
+                {parseInt(id) ===  parseInt(tokenId) &&
                 <div>
+                    <button onClick={handleEditClick}>Edit Profile</button>
                     <select
                         name="status"
                         onChange={statusChange}
@@ -145,6 +151,7 @@ function UserProfileComponent() {
                         <option value="Offline">Offline</option>
                     </select>
                 </div>
+                }
                 <FriendList></FriendList>
                 <GetFriendRequest></GetFriendRequest>
                 <GetUsers></GetUsers>
