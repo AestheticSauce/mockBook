@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import { getToken, getUserProfile } from "../jwt";
-
 function EditUserProfile() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null); // handling who the user is
     const [loading, setLoading] = useState(true); // To handle loading state
     const [error, setError] = useState(null); // To handle errors
-
+    const [redirect, setRedirect] = useState(true);
     const [formData, setFormData] = useState({
         username: '',
         biography: '',
@@ -16,10 +15,30 @@ function EditUserProfile() {
         favFood: ''
     });
 
+
+    // get the path variable from the URL
+    console.log('Path:', useLocation().pathname.split('/'));
+    var id = null;
+    if (useLocation().pathname.split('/').length < 3) {
+        console.error('No user ID found in path');
+        throw new Error('No user ID found in path');
+    } else {
+        console.log('User ID:', useLocation().pathname.split('/').at(2));
+        id = useLocation().pathname.split('/').at(2);
+    }
+
     useEffect(() => {
         const fetchUser = async () => {
             try {
                 const userProfile = await getUserProfile();
+                if(parseInt(userProfile.id) !== parseInt(id)){
+                    setTimeout(() => {
+                        navigate(`/userprofile/${userProfile.id}`);
+                    }, 3000);
+                    return;
+                }
+                setRedirect(false);
+
                 const token = getToken().trim();
                 const myHeaders = {
                     "Authorization": `Bearer ${token}`,
@@ -100,7 +119,7 @@ function EditUserProfile() {
             setError(error.message);
         }
     };
-
+    if(redirect) return <h1>Users can only edit their own profiles. Redirecting. </h1>
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
     if (!user) return <div>No user data available</div>;
@@ -128,6 +147,7 @@ function EditUserProfile() {
                 <input type="text" name="favFood" value={formData.favFood} onChange={handleChange} />
             </div>
             <button type="submit">Update</button>
+
         </form>
     );
 }
