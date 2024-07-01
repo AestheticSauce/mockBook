@@ -1,15 +1,17 @@
 package com.group3.mockbook.service.Implementation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.group3.mockbook.exceptions.DuplicateEmailException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
+import com.group3.mockbook.model.Friendship;
 import com.group3.mockbook.model.User;
 import com.group3.mockbook.repository.UserRepository;
+import com.group3.mockbook.security.UserPrincipal;
+import com.group3.mockbook.service.FriendshipService;
 import com.group3.mockbook.service.UserService;
 
 import jakarta.persistence.EntityNotFoundException;

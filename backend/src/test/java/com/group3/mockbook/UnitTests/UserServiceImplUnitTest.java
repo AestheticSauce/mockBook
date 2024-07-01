@@ -9,7 +9,6 @@ import com.group3.mockbook.service.Implementation.UserServiceImpl;
 
 import jakarta.persistence.EntityNotFoundException;
 
-import org.hibernate.proxy.EntityNotFoundDelegate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -119,15 +118,68 @@ public class UserServiceImplUnitTest {
         when(userRepository.findByEmailAndPassword(anyString(), anyString())).thenReturn(Optional.empty());
         assertThrows(EntityNotFoundException.class, () -> userService.getUserByEmailAndPassword("notreal@example.com", "password"));
     }
-    /* 
+    
     @Test
-    public void testUpdateUser_Success() {
-        User user = new User();
-        when(userRepository.save(any(User.class))).thenReturn(user);
-        User updatedUser = userService.updateUser(user);
-        assertNotNull(updatedUser);
+    public void updateUser_Success() {
+        int userId = 1;
+        User existingUser = new User();
+        existingUser.setId(userId);
+        existingUser.setEmail("old@example.com");
+        existingUser.setUsername("oldUsername");
+
+        User updatedDetails = new User();
+        updatedDetails.setEmail("new@example.com");
+        updatedDetails.setUsername("newUsername");
+        updatedDetails.setPassword("newPassword");
+        updatedDetails.setBiography("newBiography");
+        updatedDetails.setSecurityQuestion("newSecurityQuestion");
+        updatedDetails.setSecurityAnswer("newSecurityAnswer");
+        updatedDetails.setBirthday("newBirthday");
+        updatedDetails.setDegree("newDegree");
+        updatedDetails.setFavFood("newFavFood");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
+        when(userRepository.saveAndFlush(any(User.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        User updatedUser = userService.updateUser(userId, updatedDetails);
+
+        assertEquals("new@example.com", updatedUser.getEmail());
+        assertEquals("newUsername", updatedUser.getUsername());
+        verify(userRepository).saveAndFlush(updatedUser);
     }
-    */
+
+    @Test
+    public void updateUser_UserNotFound() {
+        int userId = 999;
+        User updatedDetails = new User();
+        updatedDetails.setEmail("new@example.com");
+        updatedDetails.setUsername("newUsername");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> userService.updateUser(userId, updatedDetails));
+    }
+
+    @Test
+    public void updateUser_NoChanges() {
+        int userId = 1;
+        User existingUser = new User();
+        existingUser.setId(userId);
+        existingUser.setEmail("old@example.com");
+        existingUser.setUsername("oldUsername");
+
+        User updatedDetails = new User();
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
+        when(userRepository.saveAndFlush(any(User.class))).thenAnswer(i -> i.getArguments()[0]);
+
+        User updatedUser = userService.updateUser(userId, updatedDetails);
+
+        assertEquals("old@example.com", updatedUser.getEmail());
+        assertEquals("oldUsername", updatedUser.getUsername());
+        verify(userRepository).saveAndFlush(updatedUser);
+    }
+
     @Test
     public void testDeleteUser_Success() {
         doNothing().when(userRepository).deleteById(anyInt());

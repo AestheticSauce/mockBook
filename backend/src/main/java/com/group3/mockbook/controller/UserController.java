@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import com.group3.mockbook.dto.User.StatusUpdateDTO;
 import com.group3.mockbook.dto.User.UserDTO;
 import com.group3.mockbook.model.User;
+import com.group3.mockbook.security.UserPrincipal;
 import com.group3.mockbook.service.UserService;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -15,6 +16,7 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
 
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -75,5 +77,4 @@ public class UserController {
     public User updateUser(@PathVariable int id, @RequestBody User userDetails) {
         return userService.updateUser(id, userDetails);
     }
-    
 }

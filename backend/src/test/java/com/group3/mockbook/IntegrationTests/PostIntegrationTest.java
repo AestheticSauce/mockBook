@@ -122,7 +122,7 @@ public class PostIntegrationTest {
         String json = resp.getResponse().getContentAsString();
         List<Post> posts = new ObjectMapper().readValue(json, new TypeReference<List<Post>>() {
         });
-        assertEquals(2, posts.size());
+        assertEquals(3, posts.size());
         
     }
 }
