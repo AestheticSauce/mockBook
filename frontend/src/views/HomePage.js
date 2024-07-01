@@ -210,8 +210,18 @@ const HomePage = () => {
               <li key={index}>
                 <h3>{nonFriend.username}</h3>
                 <button
-                  type="button"
-                  onClick={() => (window.location.href = "/UserProfile")}
+                    type="button"
+                    onClick={() => axios({
+                      method: 'POST',
+                      url: `http://localhost:8085/v1/api/friendships`,
+                      data:{
+                        "targetId": nonFriend.id
+                      },
+                      headers: {
+                          "Authorization": `Bearer ${jwtUtils.getToken()}`,
+                          "Content-Type": "application/json",
+                      }
+                  }).then(response=>{console.log(response)})}
                 >
                   add friend
                 </button>
