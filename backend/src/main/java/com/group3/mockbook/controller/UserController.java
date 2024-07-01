@@ -2,6 +2,7 @@ package com.group3.mockbook.controller;
 
 import org.springframework.web.bind.annotation.*;
 
+import com.group3.mockbook.dto.User.StatusUpdateDTO;
 import com.group3.mockbook.dto.User.UserDTO;
 import com.group3.mockbook.model.User;
 import com.group3.mockbook.service.UserService;
@@ -57,9 +58,9 @@ public class UserController {
 
     @PutMapping("/{id}/status")
     @ResponseStatus(HttpStatus.OK)
-    public void updateStatus(@PathVariable int id, @RequestBody String status) {
+    public void updateStatus(@PathVariable int id, @RequestBody StatusUpdateDTO status) {
         User userDetails = new User();
-        userDetails.setStatus(status);
+        userDetails.setStatus(status.getStatus());
         userService.updateUser(id, userDetails);
     }
 

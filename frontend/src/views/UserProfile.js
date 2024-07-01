@@ -19,8 +19,15 @@ function UserProfileComponent() {
         };
 
         // get the path variable from the URL
-        console.log('Path:', useLocation().pathname.split('/').at(-1));
-        const id = useLocation().pathname.split('/').at(-1);
+        console.log('Path:', useLocation().pathname.split('/'));
+        var id = null;
+        if (useLocation().pathname.split('/').length < 3) {
+            console.error('No user ID found in path');
+            throw new Error('No user ID found in path');
+        } else {
+            console.log('User ID:', useLocation().pathname.split('/').at(2));
+            id = useLocation().pathname.split('/').at(2);
+        }
 
         // Effect to pull in user data
         useEffect(() => {
@@ -53,6 +60,7 @@ function UserProfileComponent() {
                     const result = await response.json();
                     console.log('Result:', result);
                     setUser(result);
+                    user = result;
                     console.log(`user data:`,user.data)
                     navigate(`/userprofile/${result.id}/`);
                     setLoading(false);
