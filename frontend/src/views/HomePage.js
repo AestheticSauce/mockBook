@@ -4,6 +4,8 @@ import * as jwtUtils from "../jwt.js";
 import { useForm } from "react-hook-form";
 import "../HomePageStyles.css";
 import Logout from "../components/Logout";
+import {getToken} from "../jwt.js";
+import {useNavigate} from "react-router-dom";
 
 const HomePage = () => {
   const [user, setUser] = useState(null);
@@ -11,6 +13,7 @@ const HomePage = () => {
   const [friendsPosts, setFriendsPosts] = useState([]);
   const [nonFriends, setNonFriends] = useState([]);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
   const { register, handleSubmit, reset } = useForm();
 
   useEffect(() => {
@@ -29,6 +32,13 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
+    const token = getToken()
+    if (token == null){
+      setTimeout(() => {
+        navigate(`Login`);
+      }, 1000);
+      return;
+    }
     const fetchFriends = async () => {
       try {
         const response = await axios.get(

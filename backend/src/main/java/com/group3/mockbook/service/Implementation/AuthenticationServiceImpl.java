@@ -2,6 +2,7 @@ package com.group3.mockbook.service.Implementation;
 
 import java.util.Optional;
 
+import com.group3.mockbook.exceptions.DuplicateEmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -21,7 +22,7 @@ import com.group3.mockbook.security.JwtIssuer;
 import com.group3.mockbook.security.UserPrincipal;
 import com.group3.mockbook.service.AuthenticationService;
 import com.group3.mockbook.service.UserService;
-
+import com.group3.mockbook.service.Implementation.UserServiceImpl;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
@@ -35,6 +36,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    UserServiceImpl userServiceImpl;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -56,15 +60,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public void register(RegistrationRequestDto request) {
-        User user = new User();
-        user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setUsername(request.getUsername());
-        user.setSecurityQuestion(request.getSecurityQuestion());
-        user.setSecurityAnswer(request.getSecurityAnswer());
-        user.setRole("USER");
-        user.setEnabled(true);
-        userService.saveUser(user);
+        String email = request.getEmail();
+        // check for duplicate account
+        try {
+            User dupUser = userServiceImpl.getUserByEmail(email);
+            if (dupUser != null) throw new DuplicateEmailException(email);
+        } catch (EntityNotFoundException e) {
+            User user = new User();
+            user.setEmail(email);
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+            user.setUsername(request.getUsername());
+            user.setSecurityQuestion(request.getSecurityQuestion());
+            user.setSecurityAnswer(request.getSecurityAnswer());
+            user.setRole("USER");
+            user.setEnabled(true);
+            userService.saveUser(user);
+        }
     }
 
     @Override
