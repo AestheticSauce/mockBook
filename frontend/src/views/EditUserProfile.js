@@ -5,9 +5,9 @@ import Logout from "../components/Logout";
 function EditUserProfile() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null); // handling who the user is
-    const [loading, setLoading] = useState(true); // To handle loading state
     const [error, setError] = useState(null); // To handle errors
     const [redirect, setRedirect] = useState(true);
+    const [logOut, setLogOut] = useState(true);
     const [formData, setFormData] = useState({
         username: '',
         biography: '',
@@ -30,17 +30,27 @@ function EditUserProfile() {
 
     useEffect(() => {
         const fetchUser = async () => {
+
+            const token = getToken()
+            if (token == null){
+                setTimeout(() => {
+                    navigate(`Login`);
+                }, 1000);
+                return;
+            }
+            setLogOut(false);
             try {
                 const userProfile = await getUserProfile();
                 if(parseInt(userProfile.id) !== parseInt(id)){
                     setTimeout(() => {
                         navigate(`/userprofile/${userProfile.id}`);
-                    }, 3000);
+                    }, 1500);
                     return;
                 }
                 setRedirect(false);
 
                 const token = getToken().trim();
+
                 const myHeaders = {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json",
@@ -68,10 +78,8 @@ function EditUserProfile() {
                 formData.favFood = result.favFood;
 
                 setUser(result);
-                setLoading(false);
             } catch (error) {
                 setError(error.message);
-                setLoading(false);
             }
         };
 
@@ -120,8 +128,8 @@ function EditUserProfile() {
             setError(error.message);
         }
     };
+    if(logOut) return <h1>Please Login to access content </h1>
     if(redirect) return <h1>Users can only edit their own profiles. Redirecting. </h1>
-    if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
     if (!user) return <div>No user data available</div>;
 
