@@ -27,6 +27,7 @@ function Register() {
       .then((response) => {
         if (!response.ok) {
           setError("root.serverError", {type: response.status, message: response.statusText})
+          return;
         }
         setShowModal(true);
         setTimeout(() => {
