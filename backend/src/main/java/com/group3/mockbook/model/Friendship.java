@@ -3,6 +3,7 @@ package com.group3.mockbook.model;
 import java.sql.Timestamp;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.CascadeType;
@@ -25,9 +26,11 @@ public class Friendship {
     private int id;
 
     @ManyToOne()
+    @NaturalId
     private User sourceUser;
 
     @ManyToOne()
+    @NaturalId
     private User targetUser;
 
     private RequestStatus status;
