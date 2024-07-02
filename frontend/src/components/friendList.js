@@ -1,18 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { getToken } from "../jwt";
+import { getToken} from "../jwt";
 import Friend from "./friend";  // Corrected the import statement
 import '../styles/dropdown.css'
 import '../styles/Main.css'
 import axios from "axios";
+import * as jwtUtils from "../jwt.js";
+
 function FriendList() {
     const [show, setShow] = useState(false);
     const [deletedFriends, setDeletedFriends] = useState(new Set());
     const [currFriends, updateCurrFriends] = useState([]);
     const [users, updateUsers] = useState([]);
-
+    const [user, setUser] = useState();
     function removeFriend(id) {
         setDeletedFriends(prevDeletedFriends => new Set([...prevDeletedFriends, id]));
     }
+    useEffect(()=>{
+        const fetchUser = async () => {
+            try {
+              const userProfile = await jwtUtils.getUserProfile();
+              console.log(userProfile);
+              setUser(userProfile);
+            } catch (error) {
+              console.error("Unauthorized access", error);
+            }
+          };
+          fetchUser();
+    },[])
     
     useEffect(() => {
         if (show) {
@@ -37,14 +51,20 @@ function FriendList() {
     
     useEffect(() => {
         if (users.length > 0) {
-            const friends = users.filter(user => user.sourceUser && !deletedFriends.has(user.sourceUser.id))
-                                 .map(user => (
-                                     <Friend key={user.sourceUser.id}
-                                             id={user.id}
-                                             friendId={user.sourceUser.id}
-                                             username={user.sourceUser.email} 
-                                             onClick={() => removeFriend(user.sourceUser.id)} />
-                                 ));
+            const friends = users.filter(person => person.sourceUser && !deletedFriends.has(person.sourceUser.id))
+                                 .map(person=> {
+                                    let friend = person.sourceUser;
+                                    if(friend.id === Number(user.id)){
+                                        friend = person.targetUser;
+                                    }
+                                    return(
+                                        <Friend key={person.id}
+                                             id={person.id}
+                                             friendId={friend.id}
+                                             username={friend.email} 
+                                             onClick={() => removeFriend(friend.id)} />
+                                    )
+                                 });
             updateCurrFriends(friends);
         }
     }, [users, deletedFriends]);
